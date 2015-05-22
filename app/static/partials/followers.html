@@ -1,0 +1,16 @@
+<div id="followersTemplate" class="container-fluid">
+	<div class="row page-header container-fluid">
+		<h4>followers</h4>
+	</div>
+	<div>
+		<ul>
+			<li ng-repeat="user in followArr"><a
+				href="#/user/{{user.user_id}}">
+					<div class="row">
+						<img class="col-xs-4" fallback-src="images/users/default.jpg" ng-src="images/users/{{user.username}}.jpg">
+						<h5 class="col-xs-8">{{user.username}}</h5>
+					</div>
+			</a></li>
+		</ul>
+	</div>
+</div>

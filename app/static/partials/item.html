@@ -1,0 +1,78 @@
+<div id="itemTemplate" class="container-fluid">
+	<div class="row page-header">
+		<div id="itemImg" class="col-md-6 col-xs-6">
+			<img fallback-src="images/items/default.jpg"  ng-src="http://image.tmdb.org/t/p/h632/{{item.itemDetails.other_data}}" />
+		</div>
+		<div class="col-md-6 col-xs-6">
+			<h4>{{item.itemDetails.title}}</h4>
+			<div class="input-group myRankDiv">
+				<span class="input-group-addon">my rank: </span> <select
+					class="form-control" ng-change="addRank()" ng-model="myRank">
+					<option value="0">---</option>
+					<option value="1">1</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+					<option value="4">4</option>
+					<option value="5">5</option>
+				</select>
+			</div>
+			<button class="btn btn-default btn-block btn-xs reviewBtn"
+				ng-click="addReview()">{{reviewButton}}</button>
+		</div>
+	</div>
+	<div ng-show="showReview">
+		<p ng-show="errorShow" class="alert alert-danger">{{message}}</p>
+		<div class="reviewTextarea">
+			<textarea rows="4" class="form-control" maxlength="499"
+				ng-model="reviewText"></textarea>
+		</div>
+		<div class="row container-fluid">
+		<div class="col-md-1 col-xs-1"></div>
+			<button class="btn btn-success col-md-4 col-xs-4 btn-sm"
+				ng-click="sendReview()">
+				<strong>send</strong> <span class="glyphicon glyphicon-send"></span>
+			</button>
+			<div class="col-md-2 col-xs-2"></div>
+			<button class="btn btn-danger col-md-4 col-xs-4 btn-sm"
+				ng-if="userRank.review_id" ng-click="deleteReview()">
+				<strong>delete</strong> <span class="glyphicon glyphicon-trash"></span>
+			</button>
+			<div class="col-md-1 col-xs-1"></div>
+		</div>
+	</div>
+	<div ng-hide="hideItem">
+		<h5 ng-click="followingRanks = !followingRanks">
+			<span class="text-muted">Following's rank: </span>
+			{{item.itemRanks.followingAvg}}
+		</h5>
+		<ul ng-show="followingRanks">
+			<li ng-repeat="rank in ranksArr">
+				<div class="row">
+					<a href="#/user/{{rank.user_id}}"><img class="col-xs-4"
+						fallback-src="images/users/default.jpg" ng-src="images/users/{{rank.username}}.jpg" /></a>
+					<div class="col-xs-8">
+						<h5>
+							<a href="#/user/{{rank.user_id}}">{{rank.username}}</a>
+						</h5>
+						<div class="row">
+							<p class="col-xs-6">rank: {{rank.rank}}</p>
+							<button id="reviewBtn{{rank.review_id}}"
+								class="col-xs-6 btn btn-default reviewBtn btn-xs"
+								ng-if="rank.review_id"
+								ng-click="getReview($index ,rank.review_id)">read
+								review</button>
+						</div>
+					</div>
+				</div>
+				<div ng-if="rank.review_id" id="review-{{rank.review_id}}"
+					ng-show="review{{rank.review_id}}">{{rank.reviewText}}</div>
+
+			</li>
+		</ul>
+		<h5>
+			<span class="text-muted">Total rank: </span>{{item.itemRanks.totalAvg}}
+		</h5>
+		<button class="btn btn-primary" ng-click="showDescription()">description</button>
+		<p ng-show="description">{{item.itemDetails.description}}</p>
+	</div>
+</div>

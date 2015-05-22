@@ -1,0 +1,33 @@
+<div id="topTemplate" class="container-fluid">
+	<div class="row page-header container-fluid">
+		<h4>Top Titles</h4>
+		<p>
+			<select class="form-control" ng-model="selectedCat"
+				ng-change="changeCategory()"
+				ng-options="category.name for category in categories"></select>
+		</p>
+		<div id="headerGroup" class="row">
+			<span class="col-xs-6 headerGroupBtn" ng-click="getTopFollowing()"
+				ng-class="{selected : showFollowing}">Following</span> <span
+				class="col-xs-6 headerGroupBtn" ng-click="getTopAll()"
+				ng-class="{selected : !showFollowing}">All</span>
+		</div>
+	</div>
+	<div>
+		<ul>
+			<li ng-repeat="item in itemsArr">
+				<div class="row">
+					<a href="#/item/{{item.item_id}}"><img class="col-xs-4" fallback-src="images/items/default.jpg" ng-src="images/items/{{item.item_id}}.jpg" /></a>
+					<div class="col-xs-8">
+					<h5>
+						<span>{{$index +1}}. </span>
+						<a href="#/item/{{item.item_id}}">{{item.item_name}}</a>
+					</h5>
+					
+					<p>rank: {{item.avg}}</p>
+					</div>
+				</div>
+			</li>
+		</ul>
+	</div>
+</div>

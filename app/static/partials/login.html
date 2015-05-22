@@ -1,0 +1,13 @@
+<div id="loginTemplate" class="container"><div class="form-signin">
+<p ng-show="messageShow" class="alert alert-danger">{{message}}</p>
+<label class="sr-only" for="username">username:</label>
+<input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="username" class="form-control" type="text" id="username" ng-model="username">
+
+<label class="sr-only" for="password">password:</label>
+<input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="password" class="form-control" type="password" id="password" ng-model="password">
+<button class="btn btn-primary btn-block loginBtn" ng-click="login()">login</button>
+<div>
+<p>Don't have an account? <a href="#/signup">Signup</a></p>
+</div>
+</div>
+</div>

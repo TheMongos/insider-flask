@@ -1,0 +1,31 @@
+<div id="singupTemplate" class="container-fluid">
+	<h4>Create a new account</h4>
+	<p ng-show="errorShow" class="alert alert-danger">{{message}}</p>
+	<form name="myForm" ng-submit="signup(myForm)">
+		<label for="username">username:</label> <input class="form-control"
+		type="text" id="username" ng-model="username" required> <br> 
+		<div id="passwordDiv" >
+			<label
+			for="password">password:</label> <input class="form-control"
+			type="password" id="password" ng-model="password" required><br> 
+			<label
+			for="repassword">re-type password:</label> <input class="form-control"
+			type="password" id="re-password" ng-model="repassword" required> <br>
+		</div>
+		<label
+		for="first_name">first name:</label> <input class="form-control"
+		type="text" id="first_name" ng-model="first_name" required> <br> 
+		<label
+		for="last_name">last name:</label> <input class="form-control"
+		type="text" id="last_name" ng-model="last_name" required> <br> 
+		<label
+		for="email">email:</label> <input class="form-control" type="email"
+		id="email" ng-model="email" name="emailField" required> <br>
+		<input class="btn btn-success" type="submit" id="submit" value="Signup" />
+	</form>
+	<div>
+		<p>
+			Already have an account? <a href="#/login">Login</a>
+		</p>
+	</div>
+</div>

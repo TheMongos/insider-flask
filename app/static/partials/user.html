@@ -1,0 +1,50 @@
+<div id="userTemplate" class="container-fluid">
+	<div class="row page-header">
+		<div id="userImg" class="col-md-6 col-xs-6">
+			<img fallback-src="images/users/default.jpg" ng-src="images/users/{{user.username}}.jpg"
+				class="img-rounded img-responsive" />
+		</div>
+
+		<div id="userDetails" class="col-md-6 col-xs-6 text-center">
+			<h4 class="userName">{{user.username}}</h4>
+			<h5>
+				<a ng-show="showIfMyUser" href="#/myfollowers/{{user.user_id}}/{{userDetails.userFollowersCount}}">{{userDetails.userFollowersCount}}
+					<span class="text-muted">followers</span>
+				</a>
+				<a ng-hide="showIfMyUser" href="#/followers/{{user.user_id}}">{{userDetails.userFollowersCount}}
+					<span class="text-muted">followers</span>
+				</a>
+			</h5>
+			<h5>
+				<a ng-show="showIfMyUser" href="#/myfollowing/{{user.user_id}}/{{userDetails.userFollowingCount}}">{{userDetails.userFollowingCount}}
+					<span class="text-muted">following</span>
+				</a>
+				<a ng-hide="showIfMyUser" href="#/following/{{user.user_id}}">{{userDetails.userFollowingCount}}
+					<span class="text-muted">following</span>
+				</a>
+			</h5>
+			<h5 ng-show="showIfMyUser">edit my profile</h5>
+			<button id="follow" ng-hide="showIfMyUser" ng-class="class"
+				ng-click="startFollowing(user.user_id)" class="btn btn-block btn-xs">{{followingLabel}}</button>
+		</div>
+	</div>
+	<ul>
+		<li ng-repeat="rank in ranksArr">
+			<div class="row">
+				<a href="#/item/{{rank.item_id}}"><img class="col-xs-4" fallback-src="images/items/default.jpg" ng-src="images/items/{{rank.item_id}}.jpg" /></a>
+				<div class="col-xs-8">
+					<h5><a href="#/item/{{rank.item_id}}">{{rank.name}}</a></h5>
+					<div class="row">
+						<p class="col-xs-6">rank: {{rank.rank}}</p>
+						<button id="reviewBtn{{rank.review_id}}" ng-click="getReview($index ,rank.review_id)"
+							class="col-xs-6 btn btn-default reviewBtn btn-xs" ng-if="rank.review_id">read review</button>
+					</div>
+				</div>
+			</div>
+			<div ng-if="rank.review_id" id="review-{{rank.review_id}}"
+				ng-show="review{{rank.review_id}}">{{rank.reviewText}}</div>
+		</li>
+	</ul>
+	<button ng-show="showIfMyUser" ng-click="logout()" class="btn btn-primary pull-right">logout</button>
+
+</div>

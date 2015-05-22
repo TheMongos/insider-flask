@@ -1,0 +1,44 @@
+<div id="searchTemplate" class="container-fluid">
+	<div class="row page-header container-fluid">
+		<div id="searchDiv" class="input-group col-md-12 col-xs-12">
+			<input ng-model="searchText" placeholder="search for..."
+				class="form-control"> <span class="input-group-btn">
+				<button class="btn btn-default" ng-click="search()">
+					<span class="glyphicon glyphicon-search"></span>
+				</button>
+			</span>
+		</div>
+		<div id="headerGroup" class="row">
+			<span class="col-xs-4 headerGroupBtn"
+				ng-click="changeSearch('movie')" ng-class="{selected : isMovie}">Movie</span>
+			<span class="col-xs-4 headerGroupBtn" ng-click="changeSearch('tv')"
+				ng-class="{selected : isTv}">TV</span> <span
+				class="col-xs-4 headerGroupBtn" ng-click="changeSearch('user')"
+				ng-class="{selected : isUser}">User</span>
+		</div>
+	</div>
+	<div>
+		<ul>
+			<li ng-if="item.category_id == 2 && isTv" ng-repeat="item in itemArr">
+				<a href="#/item/{{item.item_id}}">
+				<div class="row">
+				<img class="col-xs-4" fallback-src="images/items/default.jpg"
+					ng-src="images/items/{{item.item_id}}.jpg"> 
+					<h5 class="col-xs-8">{{item.title}}</h5></div></a>
+					
+			</li>
+			<li ng-if="item.category_id == 1 && isMovie"
+				ng-repeat="item in itemArr"><a href="#/item/{{item.item_id}}">
+				<div class="row">
+				<img class="col-xs-4" fallback-src="images/items/default.jpg"
+					ng-src="images/items/{{item.item_id}}.jpg"> 
+					<h5 class="col-xs-8">{{item.title}}</h5></div></a></li>
+			<li ng-if="isUser" ng-repeat="user in userArr"><a
+				href="#/user/{{user.user_id}}">
+				<div class="row">
+				<img class="col-xs-4" fallback-src="images/users/default.jpg"
+					ng-src="images/users/{{user.username}}.jpg">
+					<h5 class="col-xs-8">{{user.username}}</h5></div></a></li>
+		</ul>
+	</div>
+</div>
