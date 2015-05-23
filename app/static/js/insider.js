@@ -23,22 +23,22 @@ myApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $l
 		templateUrl: 'static/partials/user.html',
 		controller:'user'
 	})
-	.when('/following/:user_id', {
+	.when('/following/:username', {
 		templateUrl: 'static/partials/following.html',
 		controller:'following'
 	})
-	.when('/followers/:user_id', {
+	.when('/followers/:username', {
 		templateUrl: 'static/partials/followers.html',
 		controller:'followers'
 	})
-	.when('/myfollowing/:user_id/:count', {
-		templateUrl: 'static/partials/following.html',
-		controller:'myFollowing'
-	})
-	.when('/myfollowers/:user_id/:count', {
-		templateUrl: 'static/partials/followers.html',
-		controller:'myFollowers'
-	})
+	// .when('/myfollowing/:user_id/:count', {
+	// 	templateUrl: 'static/partials/following.html',
+	// 	controller:'myFollowing'
+	// })
+	// .when('/myfollowers/:user_id/:count', {
+	// 	templateUrl: 'static/partials/followers.html',
+	// 	controller:'myFollowers'
+	// })
 	.when('/login', {
 		templateUrl: 'static/partials/login.html',
 		controller:'login'
@@ -132,15 +132,16 @@ myApp.controller('user', function($scope,$resource, $location, $routeParams){
 	}
 
 	User.get(function(res){
-		$scope.res= res;
-		$scope.user = res.user.user;
-		$scope.userDetails = res.user.userDetails;
+		console.log(res);
+		$scope.res = res;
+		$scope.user = res.user;
+		//$scope.userDetails = res.user.userDetails;
 
-		getRanks(res.user.user.user_id);
-		if(res.user.userDetails.isMyAccount){
+		getRanks(res.user.username);
+		if(res.user.isMyAccount){
 			$scope.showIfMyUser = true;
 		} else {
-			if(res.user.userDetails.isFollowing) {
+			if(res.user.isFollowing) {
 				$scope.followingLabel = "Following";
 				$('#follow').addClass("follow");
 				$('#follow').addClass("btn-success");
@@ -155,8 +156,8 @@ myApp.controller('user', function($scope,$resource, $location, $routeParams){
 		$location.path('/login').replace();
 	});	
 
-	function getRanks(user_id){
-		var Ranks = $resource('/rank/:user_id', {user_id: user_id});
+	function getRanks(username){
+		var Ranks = $resource('/rank/:username', {username: username});
 		$scope.ranksArr =  Ranks.query();
 	}
 
@@ -472,7 +473,7 @@ myApp.controller('search', function($scope,$resource, $location, $routeParams){
 });
 
 myApp.controller('following', function($scope,$resource, $location, $routeParams){
-	var Following = $resource('/user/following/:user_id', {user_id: $routeParams.user_id});
+	var Following = $resource('/user/following/:username', {username: $routeParams.username});
 
 	$scope.followArr = Following.query(function(res){
 		console.log(res);
@@ -481,14 +482,10 @@ myApp.controller('following', function($scope,$resource, $location, $routeParams
 		$location.path('/login').replace();
 	});
 	
-	$scope.printArr = function(){
-		console.log("printArr");
-		console.log($scope.followArr);
-	}
 });
 
 myApp.controller('followers', function($scope,$resource, $location, $routeParams){
-	var Followers = $resource('/user/followers/:user_id', {user_id: $routeParams.user_id});
+	var Followers = $resource('/user/followers/:username', {username: $routeParams.username});
 
 	$scope.followArr = Followers.query(function(res){
 		console.log(res);
@@ -496,54 +493,56 @@ myApp.controller('followers', function($scope,$resource, $location, $routeParams
 	function (error){
 		$location.path('/login').replace();
 	});
+
+
 });
 
-myApp.controller('myFollowing', function($scope,$resource, $location, $routeParams){
-	getFollowing(function(results){
-		if($routeParams.count == results.rows.length){
-			$scope.followArr = [];
-			for (var i = 0 ; i < results.rows.length ; i++) {
-				var row = results.rows.item(i);
-				$scope.followArr.push({ user_id :  row.user_id , username : row.username });
-			}
-			$scope.$apply();
-		} else {
-			var Followers = $resource('/user/following/:user_id', {user_id: $routeParams.user_id});
-			deleteFollowers(function() {});
+// myApp.controller('myFollowing', function($scope,$resource, $location, $routeParams){
+// 	getFollowing(function(results){
+// 		if($routeParams.count == results.rows.length){
+// 			$scope.followArr = [];
+// 			for (var i = 0 ; i < results.rows.length ; i++) {
+// 				var row = results.rows.item(i);
+// 				$scope.followArr.push({ user_id :  row.user_id , username : row.username });
+// 			}
+// 			$scope.$apply();
+// 		} else {
+// 			var Followers = $resource('/user/following/:user_id', {user_id: $routeParams.user_id});
+// 			deleteFollowers(function() {});
 			
-			$scope.followArr = Followers.query(function(res){
-				saveFollowers(res);
-			},
-			function (error){
-				$location.path('/login').replace();
-			});
+// 			$scope.followArr = Followers.query(function(res){
+// 				saveFollowers(res);
+// 			},
+// 			function (error){
+// 				$location.path('/login').replace();
+// 			});
 			
-		}
-	});
+// 		}
+// 	});
 	
-});
+// });
 
-myApp.controller('myFollowers', function($scope,$resource, $location, $routeParams){
-	getFollower(function(results){
-		if($routeParams.count == results.rows.length){
-			$scope.followArr = [];
-			for (var i = 0 ; i < results.rows.length ; i++) {
-				var row = results.rows.item(i);
-				$scope.followArr.push({ user_id :  row.user_id , username : row.username });
-			}
-			$scope.$apply();
-		} else {
-			var Followers = $resource('/user/followers/:user_id', {user_id: $routeParams.user_id});
-			deleteFollowers(function() {});
+// myApp.controller('myFollowers', function($scope,$resource, $location, $routeParams){
+// 	getFollower(function(results){
+// 		if($routeParams.count == results.rows.length){
+// 			$scope.followArr = [];
+// 			for (var i = 0 ; i < results.rows.length ; i++) {
+// 				var row = results.rows.item(i);
+// 				$scope.followArr.push({ user_id :  row.user_id , username : row.username });
+// 			}
+// 			$scope.$apply();
+// 		} else {
+// 			var Followers = $resource('/user/followers/:user_id', {user_id: $routeParams.user_id});
+// 			deleteFollowers(function() {});
 			
-			$scope.followArr = Followers.query(function(res){
-				saveFollowers(res);
-			},
-			function (error){
-				$location.path('/login').replace();
-			});
+// 			$scope.followArr = Followers.query(function(res){
+// 				saveFollowers(res);
+// 			},
+// 			function (error){
+// 				$location.path('/login').replace();
+// 			});
 			
-		}
-	});
+// 		}
+// 	});
 
-});
+// });

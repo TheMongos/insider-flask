@@ -10,6 +10,7 @@ class Logout(Resource):
     def post(self):
         User(current_user.username).logout()
         logout_user()
+        #TO-DO
         return {'logout' : 'logout'}
 
 api.add_resource(Logout, '/logout')

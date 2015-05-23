@@ -4,11 +4,11 @@
 	</div>
 	<div>
 		<ul>
-			<li ng-repeat="user in followArr"><a
-				href="#/user/{{user.user_id}}">
+			<li ng-repeat="username in followArr"><a
+				href="#/user/{{username}}">
 					<div class="row">
-						<img class="col-xs-4" fallback-src="images/users/default.jpg" ng-src="images/users/{{user.username}}.jpg">
-						<h5 class="col-xs-8">{{user.username}}</h5>
+						<img class="col-xs-4" fallback-src="/static/images/users/default.jpg" ng-src="/static/images/users/{{username}}.jpg">
+						<h5 class="col-xs-8">{{username}}</h5>
 					</div>
 			</a></li>
 		</ul>

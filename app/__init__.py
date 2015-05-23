@@ -19,8 +19,8 @@ def create_app(config=None):
     return app
 
 @login_manager.user_loader
-def load_user(userid):
-    return User(userid).find()
+def load_user(username):
+    return User(username).find()
 
 @login_manager.unauthorized_handler
 def unauth_user():

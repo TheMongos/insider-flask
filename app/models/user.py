@@ -2,15 +2,17 @@ from flask.ext.login import UserMixin, current_user
 from passlib.hash import bcrypt
 from py2neo import Node, Relationship
 from . import graph
+import time
 
 class User(UserMixin):
-    def __init__(self, username, password=None, first_name=None, last_name=None, email=None, role=None, authenticated=False):
+    def __init__(self, username, password=None, first_name=None, last_name=None, email=None, role=None, created_ts=None, authenticated=False):
         self.username = username
         self.password = password
         self.first_name = first_name
         self.last_name = last_name
         self.email = email
         self.role = role
+        self.created_ts = created_ts
         self.authenticated = authenticated
 
     def get_id(self):
@@ -51,7 +53,9 @@ class User(UserMixin):
                         ,last_name=last_name
                         ,email=email
                         ,role=role
+                        ,created_ts=int(time.time())
                         ,authenticated=False)
+                        
             graph.create(user)
             return True
         else:
@@ -63,3 +67,58 @@ class User(UserMixin):
             return bcrypt.verify(password, user.password)
         else:
             return False
+
+    def addUserFollowing(self, user_follow_username):
+        query = """MATCH (u1:User {{username: '{0}'}}), (u2:User {{username: '{1}'}}) 
+        CREATE UNIQUE (u1)-[r:FOLLOWS]->(u2) 
+        RETURN r""".format(self.username, user_follow_username)
+        queryRes = graph.cypher.execute(query)
+        
+        if len(queryRes):
+            return True
+        else:
+            return False
+
+    def getUser(self, username):
+        query = """MATCH (u1:User {{username: '{0}'}})
+        OPTIONAL MATCH (u1)-[r:FOLLOWS]->(u2:User {{username: '{1}'}})
+        OPTIONAL MATCH (u1)-[:FOLLOWS]->(u3:User)
+        OPTIONAL MATCH (u4:User)-[:FOLLOWS]->(u1)
+        RETURN u1.username as username,
+        u1.first_name as first_name,
+        u1.last_name as last_name,
+        r IS NOT NULL as isFollowing, 
+        count(u3) as userFollowingCount, 
+        count(u4) as userFollowersCount, 
+        '{0}' = '{1}' as isMyAccount""".format(username, self.username)
+        queryRes = graph.cypher.execute(query)
+        if len(queryRes) != 0:
+            keys = queryRes.columns
+            values = [value for value in queryRes[0]]
+            user = dict(zip(keys, values))
+        else:
+            user={}
+
+        return user
+
+    def getUserFollowing(self):
+        query = """MATCH (u1:User {{username: '{0}'}})-[:FOLLOWS]->(u2:User) 
+        RETURN u2.username as username""".format(self.username)
+        query_res = graph.cypher.execute(query)
+        res_arr = []
+        if len(query_res):
+            res_arr = [user for user in query_res[0]]
+        return res_arr
+
+    def getUserFollowers(self):
+        query = """MATCH (u1:User {{username: '{0}'}})<-[:FOLLOWS]-(u2:User) 
+        RETURN u2.username as username""".format(self.username)
+        query_res = graph.cypher.execute(query)
+        res_arr = []
+        if len(query_res):
+            res_arr = [user for user in query_res[0]]
+        return res_arr
+
+    def __str__(self):
+        attrs = vars(self)
+        return ', '.join("%s: %s" % item for item in attrs.items())
