@@ -10,7 +10,6 @@ class Login(Resource):
 
         if not user.verify_password(signup_obj['password']):
             message = 'Invalid login.'
-            print error
         else:
             user.login()
             login_user(user)
