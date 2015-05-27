@@ -23,13 +23,11 @@ class ThisUser(Resource):
         my_username = session['user_id']
         res = User(my_username).addUserFollowing(user_follow_username)
         if res:
-            return_code = 200
             message = { 'status': 'success', 'message': 'you are now following ' + user_follow_username}
         else:
-            return_code = 200
             message = { 'status': 'failure', 'message': 'you are already following' }
 
-        return {'follow': user_follow_username}
+        return message
 
 class OtherUser(Resource):
     decorators = [login_required]

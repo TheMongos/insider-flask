@@ -25,18 +25,18 @@
 	<ul>
 		<li ng-repeat="rank in ranksArr">
 			<div class="row">
-				<a href="#/item/{{rank.item_id}}"><img class="col-xs-4" fallback-src="/static/images/items/default.jpg" ng-src="/static/images/items/{{rank.item_id}}.jpg" /></a>
+				<a href="#/item/{{rank.item_id}}"><img class="col-xs-4" fallback-src="/static/images/items/default.jpg" ng-src="http://image.tmdb.org/t/p/h632/{{rank.poster_path}}" /></a>
 				<div class="col-xs-8">
-					<h5><a href="#/item/{{rank.item_id}}">{{rank.name}}</a></h5>
+					<h5><a href="#/item/{{rank.item_id}}">{{rank.title}}</a></h5>
 					<div class="row">
 						<p class="col-xs-6">rank: {{rank.rank}}</p>
-						<button id="reviewBtn{{rank.review_id}}" ng-click="getReview($index ,rank.review_id)"
-							class="col-xs-6 btn btn-default reviewBtn btn-xs" ng-if="rank.review_id">read review</button>
+						<button id="reviewBtn{{rank.item_id}}" ng-click="getReview($index ,rank.item_id)"
+							class="col-xs-6 btn btn-default reviewBtn btn-xs" ng-if="rank.review_text">read review</button>
 					</div>
 				</div>
 			</div>
-			<div ng-if="rank.review_id" id="review-{{rank.review_id}}"
-				ng-show="review{{rank.review_id}}">{{rank.reviewText}}</div>
+			<div ng-if="rank.review_text" id="review-{{rank.item_id}}"
+				ng-show="review{{rank.item_id}}">{{rank.review_text}}</div>
 		</li>
 	</ul>
 	<button ng-show="showIfMyUser" ng-click="logout()" class="btn btn-primary pull-right">logout</button>

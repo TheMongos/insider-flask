@@ -81,7 +81,7 @@ class User(UserMixin):
 
     def getUser(self, username):
         query = """MATCH (u1:User {{username: '{0}'}})
-        OPTIONAL MATCH (u1)-[r:FOLLOWS]->(u2:User {{username: '{1}'}})
+        OPTIONAL MATCH (u1)<-[r:FOLLOWS]-(u2:User {{username: '{1}'}})
         OPTIONAL MATCH (u1)-[:FOLLOWS]->(u3:User)
         OPTIONAL MATCH (u4:User)-[:FOLLOWS]->(u1)
         RETURN u1.username as username,
@@ -97,7 +97,7 @@ class User(UserMixin):
             values = [value for value in queryRes[0]]
             user = dict(zip(keys, values))
         else:
-            user={}
+            user = {}
 
         return user
 

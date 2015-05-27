@@ -161,10 +161,9 @@ myApp.controller('user', function($scope,$resource, $location, $routeParams){
 		$scope.ranksArr =  Ranks.query();
 	}
 
-	$scope.getReview = function(index, review_id){
-		//var str = "#review-"+review_id;
-		var str2 = "review"+review_id;
-		var reviewBtn = "#reviewBtn"+review_id;
+	$scope.getReview = function(index, item_id){
+		var str2 = "review"+item_id;
+		var reviewBtn = "#reviewBtn"+item_id;
 		$(".reviewBtn").css("background-color","white");
 		if ($scope.ranksArr[index].isOpen){
 			$scope[str2] = false;
@@ -172,27 +171,20 @@ myApp.controller('user', function($scope,$resource, $location, $routeParams){
 			$(reviewBtn).html("read review");
 		} else {
 			$(reviewBtn).html("close review");
-			if ($scope.ranksArr[index].hasReview) {
-			} else {
-				var Review = $resource('/review/:review_id', {review_id: review_id});
-				Review.get(function(res){
-					$scope.ranksArr[index].reviewText = res.review_text;
-					$scope.ranksArr[index].hasReview = true;			
-				});
-			}
 			$scope[str2] = true;
 			$scope.ranksArr[index].isOpen = true;
 		}	
 	};
 
-	$scope.startFollowing = function(user_id){
-		if(!$scope.res.user.userDetails.isFollowing){
-			var Follow = $resource('/user/follow/:user_id', {user_id: user_id});
+	$scope.startFollowing = function(username){
+		if(!$scope.user.isFollowing){
+			var Follow = $resource('/user/follow/:username', {username: username});
 			Follow.save(function(res){
+				console.log(res)
 				if(res.status == "success"){
 					$scope.followingLabel = "Following";
 					$('#follow').removeClass("notfollow btn-primary").addClass("follow btn-success");
-					$scope.userDetails.userFollowersCount++;
+					$scope.user.userFollowersCount++;
 				}
 			}, function (error){
 				$location.path('/login').replace();
@@ -225,14 +217,15 @@ myApp.controller('item', function($scope,$resource, $location, $routeParams){
 		//
 		$scope.reviewButton = "write review";
 
-		if (res.itemRanks.userRank) {
-			$scope.userRank = JSON.parse(res.itemRanks.userRank);
-			$scope.myRank = $scope.userRank.rank;
-			if($scope.userRank.review_id){
-				$scope.getFirstReview($scope.userRank.review_id);
-			}
+		if (res.itemRanks.rank) {
+			$scope.myRank = res.itemRanks.rank;
+			$scope.reviewText = res.itemRanks.review_text;
 		} else {
 			$scope.myRank = 0;
+		}
+
+		if($scope.item.itemRanks.followingAvg == null){
+			$scope.item.itemRanks.followingAvg = '-';
 		}
 
 		$scope.getFollowingRanks();
@@ -253,7 +246,7 @@ myApp.controller('item', function($scope,$resource, $location, $routeParams){
 		$scope.message = "";
 		console.log($scope.myRank);
 		if($scope.myRank != 0){
-			var Rank = $resource('/rank/:category_id/:item_id/:rank', {item_id: $scope.item.itemDetails.item_id, category_id: $scope.item.itemDetails.category_id , rank: $scope.myRank});
+			var Rank = $resource('/rank/:item_id/:rank', {item_id: $scope.item.itemDetails.item_id , rank: $scope.myRank});
 			Rank.save(function(res){
 				console.log(res);
 			},
@@ -278,7 +271,8 @@ myApp.controller('item', function($scope,$resource, $location, $routeParams){
 
 	$scope.sendReview = function(){
 		if($scope.reviewText) {
-			if($scope.myRank != 0){
+			console.log($scope.myRank)
+			if($scope.myRank != 0 && $scope.myRank){
 				var obj = {item_id: $scope.item.itemDetails.item_id, category_id: $scope.item.itemDetails.category_id , rank: $scope.myRank, review_text: $scope.reviewText};
 				var Rank = $resource('/review');
 				Rank.save(obj, function(res){
@@ -306,21 +300,21 @@ myApp.controller('item', function($scope,$resource, $location, $routeParams){
 		});
 	}
 
-	$scope.getFirstReview = function(review_id){
-		var Review = $resource('/review/:review_id', {review_id: review_id});
-		Review.get(function(res){
-			console.log(res);
-			$scope.reviewText = res.review_text;
-		},
-		function (error){
-			$location.path('/login').replace();
-		});
-	}
+	// $scope.getFirstReview = function(review_id){
+	// 	var Review = $resource('/review/:review_id', {review_id: review_id});
+	// 	Review.get(function(res){
+	// 		console.log(res);
+	// 		$scope.reviewText = res.review_text;
+	// 	},
+	// 	function (error){
+	// 		$location.path('/login').replace();
+	// 	});
+	// }
 
-	$scope.getReview = function(index, review_id){
-		//var str = "#review-"+review_id;
-		var str2 = "review"+review_id;
-		var reviewBtn = "#reviewBtn"+review_id;
+	$scope.getReview = function(index, username){
+		//var str = "#review-"+username;
+		var str2 = "review"+username;
+		var reviewBtn = "#reviewBtn"+username;
 		$(".reviewBtn").css("background-color","white");
 		if ($scope.ranksArr[index].isOpen){
 			$scope[str2] = false;
@@ -328,47 +322,18 @@ myApp.controller('item', function($scope,$resource, $location, $routeParams){
 			$(reviewBtn).html("read review");
 		} else {
 			$(reviewBtn).html("close review");
-			if ($scope.ranksArr[index].hasReview) {
-			} else {
-				var Review = $resource('/review/:review_id', {review_id: review_id});
-				Review.get(function(res){
-					$scope.ranksArr[index].reviewText = res.review_text;
-					$scope.ranksArr[index].hasReview = true;			
-				});
-			}
-			$scope[str2] = true;
-			$scope.ranksArr[index].isOpen = true;
-		}	
-	};$scope.getReview = function(index, review_id){
-		console.log("getReview111");
-		var str2 = "review"+review_id;
-		var reviewBtn = "#reviewBtn"+review_id;
-		$(".reviewBtn").css("background-color","white");
-		if ($scope.ranksArr[index].isOpen){
-			$scope[str2] = false;
-			$scope.ranksArr[index].isOpen = false;
-			$(reviewBtn).html("read review");
-		} else {
-			$(reviewBtn).html("close review");
-			if ($scope.ranksArr[index].hasReview) {
-			} else {
-				var Review = $resource('/review/:review_id', {review_id: review_id});
-				Review.get(function(res){
-					$scope.ranksArr[index].reviewText = res.review_text;
-					$scope.ranksArr[index].hasReview = true;			
-				});
-			}
 			$scope[str2] = true;
 			$scope.ranksArr[index].isOpen = true;
 		}	
 	};
 
+
 	$scope.deleteReview = function() {
-		var Delete = $resource('/review/:review_id/:item_id', { review_id: $scope.userRank.review_id , item_id: $scope.item.itemDetails.item_id });
+		var Delete = $resource('/review/:item_id', { item_id: $scope.item.itemDetails.item_id });
 
 		Delete.remove(function(res){
-			$scope.reviewText = "";
-			$scope.userRank.review_id = "";
+			$scope.review_text = "";
+			// $scope.userRank.review_id = "";
 		},
 		function (error){
 			$location.path('/login').replace();

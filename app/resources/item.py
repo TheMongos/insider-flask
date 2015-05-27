@@ -1,28 +1,45 @@
 from flask_restful import Resource, request
-from ..models.movie import MovieItem
+from ..models.item_utils import ItemUtils
+from flask_login import login_required
+from flask import session
 from . import api
 
 class Item(Resource):
+    decorators = [login_required]
     def get(self, item_id):
-        #TO-DO
-        pass
+        my_username = session['user_id']
+        item = ItemUtils().find(item_id)
+        item_ranks = ItemUtils().get_item_ranks(my_username, item_id)
+        message = { 'status': 'success', 'itemDetails': item, 'itemRanks' : item_ranks}
+        return message
 
 class Movie(Resource):
+    decorators = [login_required]
     def post(self):
     	movie_obj = request.get_json()
-        print movie_obj
-        signup_status = MovieItem().createMovie(movie_obj)
-        print signup_status
-        return {'hello' : 'nurse'}
+        create_id = ItemUtils().create_item("Movie", movie_obj)
+        if create_id:
+            return_code = 200
+            message = { 'status': 'success', 'message': 'item created', 'item_id': create_id}
+        else:
+            return_code = 409 # 409 = conflict
+            message = { 'status': 'failure', 'message': 'item already exists.'}
+
+        return message, return_code
 
 class TV(Resource):
+    decorators = [login_required]      
     def post(self):
-        signup_obj = request.get_json()
-        signup_status = User(signup_obj['username']).register(signup_obj['password']
-                                            ,signup_obj['email']
-                                            ,signup_obj['first_name']
-                                            ,signup_obj['last_name'])
-        return {'hello' : 'nurse'}
+        tv_obj = request.get_json()
+        create_id = ItemUtils().create_item("TV", tv_obj)
+        if create_id:
+            return_code = 200
+            message = { 'status': 'success', 'message': 'item created', 'item_id': create_id}
+        else:
+            return_code = 409 # 409 = conflict
+            message = { 'status': 'failure', 'message': 'item already exists.'}
+
+        return message, return_code
 
 
 api.add_resource(Item, '/item/<int:item_id>')
