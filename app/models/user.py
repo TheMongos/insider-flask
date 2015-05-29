@@ -86,6 +86,7 @@ class User(UserMixin):
         OPTIONAL MATCH (u4:User)-[:FOLLOWS]->(u1)
         RETURN u1.username as username,
         u1.first_name as first_name,
+        u1.role as role,
         u1.last_name as last_name,
         r IS NOT NULL as isFollowing, 
         count(u3) as userFollowingCount, 
@@ -106,8 +107,8 @@ class User(UserMixin):
         RETURN u2.username as username""".format(self.username)
         query_res = graph.cypher.execute(query)
         res_arr = []
-        if len(query_res):
-            res_arr = [user for user in query_res[0]]
+        for i in range(len(query_res)):
+            res_arr.append(query_res[i]['username'])
         return res_arr
 
     def getUserFollowers(self):
@@ -115,9 +116,28 @@ class User(UserMixin):
         RETURN u2.username as username""".format(self.username)
         query_res = graph.cypher.execute(query)
         res_arr = []
-        if len(query_res):
-            res_arr = [user for user in query_res[0]]
+        for i in range(len(query_res)):
+            res_arr.append(query_res[i]['username'])
         return res_arr
+
+    @staticmethod
+    def search_user(query):
+        query = """MATCH (u:User) 
+                WHERE u.username =~ "(?i){0}.*" 
+                RETURN u.username as username""".format(query)
+        query_res = graph.cypher.execute(query)
+        res_arr = []
+        for i in range(len(query_res)):
+            res_arr.append(query_res[i]['username'])
+        return res_arr
+
+    @staticmethod
+    def authenticate_admin(username):
+        user = User(username).find()
+        if user.role == 'admin':
+            return True
+        else:
+            return False
 
     def __str__(self):
         attrs = vars(self)

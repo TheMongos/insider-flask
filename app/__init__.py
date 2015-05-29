@@ -13,8 +13,9 @@ def create_app(config=None):
 
     login_manager.init_app(app)
 
-    from resources import api_bp
+    from resources import api_bp, admin_bp
     app.register_blueprint(api_bp)
+    app.register_blueprint(admin_bp, url_prefix='/admin')
 
     return app
 

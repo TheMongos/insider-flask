@@ -4,18 +4,6 @@ from . import graph
 
 
 class ItemUtils():
-    # def __init__(self, label=None, item_id=None, title=None, tmdb_id=None, imdb_id=None, language=None, overview=None, poster_path=None, release_date=None, runtime=None, trailer=None):
-    #     self.label = label
-    #     self.item_id = item_id
-    #     self.title = title
-    #     self.tmdb_id = tmdb_id
-    #     self.imdb_id = imdb_id
-    #     self.language = language
-    #     self.overview = overview
-    #     self.poster_path = poster_path
-    #     self.release_date = release_date
-    #     self.runtime = runtime
-    #     self.trailer = trailer
 
     def find(self, item_id):
         item = graph.find_one("Item", "item_id", item_id)
@@ -35,7 +23,6 @@ class ItemUtils():
                 , r2.review_text as review_text
                 , count(distinct u3) as followingCount
                 , avg(r3.rank) as followingAvg""".format(username, item_id)
-        print query
         queryRes = graph.cypher.execute(query)
         if len(queryRes) != 0:
             keys = queryRes.columns
@@ -43,7 +30,6 @@ class ItemUtils():
             item_ranks = dict(zip(keys, values))
         else:
             item_ranks = {}
-        print item_ranks
         return item_ranks
 
     def create_item(self, label, item_obj):
@@ -62,3 +48,74 @@ class ItemUtils():
         new_id = graph.cypher.execute(query)[0][0]
 
         return new_id
+
+    @staticmethod
+    def search_item(query):
+        query = """MATCH (i:Item)
+                WHERE i.title =~ "(?i){0}.*"
+                RETURN i.item_id AS item_id
+                      ,i.title AS title
+                      ,i.poster_path AS poster_path
+                      ,split(i.release_date, '-')[0] as year
+                      ,filter(x in labels(i) WHERE x <> 'Item')[0] AS label
+                LIMIT 25""".format(query)
+        queryRes = graph.cypher.execute(query)
+        rtn_arr = []
+        for i in range(len(queryRes)):
+            keys = queryRes.columns
+            values = [value for value in queryRes[i]]
+            rank = dict(zip(keys, values))
+            rtn_arr.append(rank)
+        return rtn_arr
+
+    @staticmethod
+    def get_best(label):
+        query = """MATCH (u:User)-[r:RANKED]->(i:{0})
+                RETURN i.item_id AS item_id
+                      ,i.title AS title
+                      ,i.poster_path AS poster_path
+                      ,split(i.release_date, '-')[0] AS year
+                      ,COALESCE(AVG(r.rank), 0) as avg
+                ORDER BY avg DESC 
+                LIMIT 25""".format(label)
+        print query
+        queryRes = graph.cypher.execute(query)
+        rtn_arr = []
+        for i in range(len(queryRes)):
+            keys = queryRes.columns
+            values = [value for value in queryRes[i]]
+            rank = dict(zip(keys, values))
+            rtn_arr.append(rank)
+        return rtn_arr
+
+    @staticmethod
+    def get_following_best(username, label):
+        query = """MATCH (u1:User {{username: '{0}'}})-[:FOLLOWS]->(u:User)-[r:RANKED]->(i:{1})
+                RETURN i.item_id AS item_id
+                      ,i.title AS title
+                      ,i.poster_path AS poster_path
+                      ,split(i.release_date, '-')[0] AS year
+                      ,COALESCE(AVG(r.rank), 0) as avg
+                ORDER BY avg DESC 
+                LIMIT 25""".format(username, label)
+        print query
+        queryRes = graph.cypher.execute(query)
+        rtn_arr = []
+        for i in range(len(queryRes)):
+            keys = queryRes.columns
+            values = [value for value in queryRes[i]]
+            rank = dict(zip(keys, values))
+            rtn_arr.append(rank)
+        return rtn_arr
+
+    @staticmethod
+    def update_item(item_id, key, value):
+        query = """MATCH (i:Item {{item_id: {0}}})
+                SET i.{1} = '{2}' 
+                RETURN i.{1}""".format(item_id, key, value)
+        print query
+        queryRes = graph.cypher.execute(query)
+        if len(queryRes) != 0:
+            return True
+        else:
+            return False

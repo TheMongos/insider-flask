@@ -20,7 +20,7 @@
 	<div>
 		<ul>
 			<li ng-if="item.label == 'TV' && isTv" ng-repeat="item in itemArr">
-				<a href="#/item/{{item.item_id}}">
+				<a href="#/admin/item/{{item.item_id}}">
 				<div class="row">
 				<img class="col-xs-4" fallback-src="/static/images/items/default.jpg"
 					ng-src="http://image.tmdb.org/t/p/h632/{{item.poster_path}}">
@@ -28,18 +28,12 @@
 					
 			</li>
 			<li ng-if="item.label == 'Movie' && isMovie"
-				ng-repeat="item in itemArr"><a href="#/item/{{item.item_id}}">
+				ng-repeat="item in itemArr"><a href="#/admin/item/{{item.item_id}}">
 				<div class="row">
 				<img class="col-xs-4" fallback-src="/static/images/items/default.jpg"
 					ng-src="http://image.tmdb.org/t/p/h632/{{item.poster_path}}"> 
 					<h5 class="col-xs-8">{{item.title}} ({{item.year}})</h5></div></a>
 			</li>
-			<li ng-if="isUser" ng-repeat="username in userArr"><a
-				href="#/user/{{username}}">
-				<div class="row">
-				<img class="col-xs-4" fallback-src="/static/images/users/default.jpg"
-					ng-src="/static/images/users/{{username}}.jpg">
-					<h5 class="col-xs-8">{{username}}</h5></div></a></li>
 		</ul>
 	</div>
 </div>

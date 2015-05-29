@@ -39,6 +39,8 @@
 				ng-show="review{{rank.item_id}}">{{rank.review_text}}</div>
 		</li>
 	</ul>
+
 	<button ng-show="showIfMyUser" ng-click="logout()" class="btn btn-primary pull-right">logout</button>
+	<button style="margin-right: 10px" ng-if="user.role == 'admin'" class="btn btn-primary pull-right" ng-click="admin()">admin items manage</button>
 
 </div>

@@ -11,6 +11,14 @@ myApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $l
 		templateUrl: 'static/partials/search.html',
 		controller: 'search'
 	})
+	.when('/admin/search', {
+		templateUrl: 'static/partials/adminSearch.html',
+		controller: 'search'
+	})
+	.when('/admin/item/:item_id', {
+		templateUrl: 'static/partials/updateItem.html',
+		controller: 'changeItem'
+	})
 	.when('/item/:item_id', {
 		templateUrl: 'static/partials/item.html',
 		controller:'item'
@@ -31,14 +39,6 @@ myApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $l
 		templateUrl: 'static/partials/followers.html',
 		controller:'followers'
 	})
-	// .when('/myfollowing/:user_id/:count', {
-	// 	templateUrl: 'static/partials/following.html',
-	// 	controller:'myFollowing'
-	// })
-	// .when('/myfollowers/:user_id/:count', {
-	// 	templateUrl: 'static/partials/followers.html',
-	// 	controller:'myFollowers'
-	// })
 	.when('/login', {
 		templateUrl: 'static/partials/login.html',
 		controller:'login'
@@ -132,7 +132,6 @@ myApp.controller('user', function($scope,$resource, $location, $routeParams){
 	}
 
 	User.get(function(res){
-		console.log(res);
 		$scope.res = res;
 		$scope.user = res.user;
 		//$scope.userDetails = res.user.userDetails;
@@ -180,7 +179,6 @@ myApp.controller('user', function($scope,$resource, $location, $routeParams){
 		if(!$scope.user.isFollowing){
 			var Follow = $resource('/user/follow/:username', {username: username});
 			Follow.save(function(res){
-				console.log(res)
 				if(res.status == "success"){
 					$scope.followingLabel = "Following";
 					$('#follow').removeClass("notfollow btn-primary").addClass("follow btn-success");
@@ -196,7 +194,6 @@ myApp.controller('user', function($scope,$resource, $location, $routeParams){
 		var Logout = $resource('/logout');
 
 		Logout.save(function(res){
-			console.log(res)
 			$location.path('/login').replace();
 		}, function (error){
 			$location.path('/login').replace();
@@ -207,14 +204,38 @@ myApp.controller('user', function($scope,$resource, $location, $routeParams){
         $(this).attr('src',  $(this).attr('fallback-src'));
 	});
 
+	$scope.admin = function (){
+		$location.path('/admin/search').replace();
+	}
+
+});
+
+myApp.controller('changeItem', function($scope,$resource, $location, $routeParams){
+	var Item = $resource('/item/:item_id', {item_id: $routeParams.item_id});
+	Item.get(function(res){
+		$scope.item = res;
+		// $scope.title = res.itemDetails.title;
+	}, function (error){
+		$location.path('/login').replace();
+	});	
+
+
+	$scope.changeItem = function (key, value){
+		var Update = $resource('/admin/updateItem/:item_id/:key/:value', {item_id: $routeParams.item_id, key : key, value : value});
+		Update.save(function(res){
+			console.log(res);
+			$scope.errorShow = true;
+			$scope.message = res.message;
+		}, function(error){
+			$location.path('/login').replace();
+		});
+	}
 });
 
 myApp.controller('item', function($scope,$resource, $location, $routeParams){
 	var Item = $resource('/item/:item_id', {item_id: $routeParams.item_id});
 	Item.get(function(res){
 		$scope.item = res;
-		console.log(res);
-		//
 		$scope.reviewButton = "write review";
 
 		if (res.itemRanks.rank) {
@@ -244,7 +265,6 @@ myApp.controller('item', function($scope,$resource, $location, $routeParams){
 	$scope.addRank = function(){
 		$scope.errorShow = false;
 		$scope.message = "";
-		console.log($scope.myRank);
 		if($scope.myRank != 0){
 			var Rank = $resource('/rank/:item_id/:rank', {item_id: $scope.item.itemDetails.item_id , rank: $scope.myRank});
 			Rank.save(function(res){
@@ -271,7 +291,6 @@ myApp.controller('item', function($scope,$resource, $location, $routeParams){
 
 	$scope.sendReview = function(){
 		if($scope.reviewText) {
-			console.log($scope.myRank)
 			if($scope.myRank != 0 && $scope.myRank){
 				var obj = {item_id: $scope.item.itemDetails.item_id, category_id: $scope.item.itemDetails.category_id , rank: $scope.myRank, review_text: $scope.reviewText};
 				var Rank = $resource('/review');
@@ -347,8 +366,8 @@ myApp.controller('item', function($scope,$resource, $location, $routeParams){
 
 myApp.controller('top', function($scope,$resource, $location, $routeParams){
 	$scope.categories = [
-	                     {name:'Movies', id: 1},
-	                     {name:'TV', id: 2}
+	                     {label:'Movie'},
+	                     {label:'TV'}
 	                     ];
 
 	$scope.selectedCat = $scope.categories[0];
@@ -367,7 +386,7 @@ myApp.controller('top', function($scope,$resource, $location, $routeParams){
 		$scope.showFollowing = false;
 
 		//activation check 
-		var All = $resource('/best/:category_id', { category_id : $scope.selectedCat.id });
+		var All = $resource('/best/:label', { label : $scope.selectedCat.label });
 		$scope.itemsArr = All.query(function(res) {
 			console.log(res);
 		}, function(error) {
@@ -378,7 +397,7 @@ myApp.controller('top', function($scope,$resource, $location, $routeParams){
 	$scope.getTopFollowing = function() {
 		$scope.showFollowing = true;
 
-		var Following = $resource('/best/following/:category_id', { category_id : $scope.selectedCat.id });
+		var Following = $resource('/best/following/:label', { label : $scope.selectedCat.label });
 		$scope.itemsArr = Following.query(function(res) {
 			console.log(res);
 		}, function(error) {
@@ -445,8 +464,7 @@ myApp.controller('following', function($scope,$resource, $location, $routeParams
 	},
 	function (error){
 		$location.path('/login').replace();
-	});
-	
+	});	
 });
 
 myApp.controller('followers', function($scope,$resource, $location, $routeParams){
@@ -458,56 +476,17 @@ myApp.controller('followers', function($scope,$resource, $location, $routeParams
 	function (error){
 		$location.path('/login').replace();
 	});
-
-
 });
 
-// myApp.controller('myFollowing', function($scope,$resource, $location, $routeParams){
-// 	getFollowing(function(results){
-// 		if($routeParams.count == results.rows.length){
-// 			$scope.followArr = [];
-// 			for (var i = 0 ; i < results.rows.length ; i++) {
-// 				var row = results.rows.item(i);
-// 				$scope.followArr.push({ user_id :  row.user_id , username : row.username });
-// 			}
-// 			$scope.$apply();
-// 		} else {
-// 			var Followers = $resource('/user/following/:user_id', {user_id: $routeParams.user_id});
-// 			deleteFollowers(function() {});
-			
-// 			$scope.followArr = Followers.query(function(res){
-// 				saveFollowers(res);
-// 			},
-// 			function (error){
-// 				$location.path('/login').replace();
-// 			});
-			
-// 		}
-// 	});
-	
-// });
 
-// myApp.controller('myFollowers', function($scope,$resource, $location, $routeParams){
-// 	getFollower(function(results){
-// 		if($routeParams.count == results.rows.length){
-// 			$scope.followArr = [];
-// 			for (var i = 0 ; i < results.rows.length ; i++) {
-// 				var row = results.rows.item(i);
-// 				$scope.followArr.push({ user_id :  row.user_id , username : row.username });
-// 			}
-// 			$scope.$apply();
-// 		} else {
-// 			var Followers = $resource('/user/followers/:user_id', {user_id: $routeParams.user_id});
-// 			deleteFollowers(function() {});
-			
-// 			$scope.followArr = Followers.query(function(res){
-// 				saveFollowers(res);
-// 			},
-// 			function (error){
-// 				$location.path('/login').replace();
-// 			});
-			
-// 		}
-// 	});
+myApp.controller('addItem', function($scope,$resource, $location, $routeParams){
 
-// });
+	var Followers = $resource('/addItem/followers/:username', {username: $routeParams.username});
+
+	$scope.followArr = Followers.query(function(res){
+		console.log(res);
+	},
+	function (error){
+		$location.path('/login').replace();
+	});
+});

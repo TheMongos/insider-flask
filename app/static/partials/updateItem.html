@@ -1,0 +1,21 @@
+
+<div id="addItemTemplate" class="container-fluid">
+	<h4>Update Item</h4>
+	<p ng-show="errorShow" class="alert">{{message}}</p>
+	<form name="myForm" ng-submit="changeItem('title', item.itemDetails.title)">
+		<label for="title">title:</label> <input class="form-control"
+		type="text" id="title" ng-model="item.itemDetails.title" required> <br> <input class="btn btn-success" type="submit" id="submit" value="update" />
+	</form> <br>
+	<form name="myForm" ng-submit="changeItem('language', item.itemDetails.language)">
+		<label for="language">language:</label> <input class="form-control"
+		type="text" id="language" ng-model="item.itemDetails.language" required> <br> <input class="btn btn-success" type="submit" id="submit" value="update" />
+	</form> <br>
+	<form name="myForm" ng-submit="changeItem('release_date', item.itemDetails.release_date)">
+		<label for="release_date">release_date:</label> <input class="form-control"
+		type="text" id="release_date" ng-model="item.itemDetails.release_date" required> <br> <input class="btn btn-success" type="submit" id="submit" value="update" />
+	</form> <br>
+	<form name="myForm" ng-submit="changeItem('overview', item.itemDetails.overview)">
+		<label for="overview">overview:</label> <textarea class="form-control"
+		type="text" id="overview" ng-model="item.itemDetails.overview" required></textarea> <br> <input class="btn btn-success" type="submit" id="submit" value="update" />
+	</form>
+</div>
