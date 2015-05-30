@@ -4,8 +4,10 @@ from py2neo import Node, Relationship
 from . import graph
 import time
 
+
 class User(UserMixin):
-    def __init__(self, username, password=None, first_name=None, last_name=None, email=None, role=None, created_ts=None, authenticated=False):
+    def __init__(self, username, password=None, first_name=None, last_name=None, email=None, role=None, created_ts=None,
+                 authenticated=False):
         self.username = username
         self.password = password
         self.first_name = first_name
@@ -46,16 +48,16 @@ class User(UserMixin):
 
     def register(self, password, email, first_name, last_name, role='user'):
         if not self.find() and not self.find_by_email(email):
-            user = Node("User" 
-                        ,username=self.username
-                        ,password=bcrypt.encrypt(password)
-                        ,first_name=first_name
-                        ,last_name=last_name
-                        ,email=email
-                        ,role=role
-                        ,created_ts=int(time.time())
-                        ,authenticated=False)
-                        
+            user = Node("User"
+                        , username=self.username
+                        , password=bcrypt.encrypt(password)
+                        , first_name=first_name
+                        , last_name=last_name
+                        , email=email
+                        , role=role
+                        , created_ts=int(time.time())
+                        , authenticated=False)
+
             graph.create(user)
             return True
         else:
@@ -73,7 +75,7 @@ class User(UserMixin):
         CREATE UNIQUE (u1)-[r:FOLLOWS]->(u2) 
         RETURN r""".format(self.username, user_follow_username)
         queryRes = graph.cypher.execute(query)
-        
+
         if len(queryRes):
             return True
         else:

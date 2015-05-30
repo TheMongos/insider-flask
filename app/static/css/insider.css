@@ -32,6 +32,10 @@ img {
 	background-color: white;
 }
 
+.reviewBtn{
+	margin-bottom: 5px;
+}
+
 #headerGroup .headerGroupBtn {
 	text-align: center;
 	border-right: 1px solid #eee;
@@ -147,4 +151,9 @@ header
 #singupTemplate form {
 	margin-bottom: 10px;
 	
+}
+
+.genre-label {
+	margin-right: 5px;
+	display: inline-block;
 }

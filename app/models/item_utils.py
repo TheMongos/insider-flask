@@ -2,9 +2,7 @@ from py2neo import Node
 from . import graph
 
 
-
 class ItemUtils():
-
     def find(self, item_id):
         item = graph.find_one("Item", "item_id", item_id)
         if item:
@@ -18,11 +16,11 @@ class ItemUtils():
                 OPTIONAL MATCH (u)-[r2:RANKED]->(i)
                 OPTIONAL MATCH (u)-[:FOLLOWS]->(u3:User)-[r3:RANKED]->(i)
                 RETURN count(distinct u2) as totalCount
-                , avg(r.rank) as totalAvg
+                , round(100 * avg(r.rank)) / 100 as totalAvg
                 , r2.rank as rank
                 , r2.review_text as review_text
                 , count(distinct u3) as followingCount
-                , avg(r3.rank) as followingAvg""".format(username, item_id)
+                , round(100 * avg(r3.rank)) / 100 as followingAvg""".format(username, item_id)
         queryRes = graph.cypher.execute(query)
         if len(queryRes) != 0:
             keys = queryRes.columns
@@ -31,6 +29,16 @@ class ItemUtils():
         else:
             item_ranks = {}
         return item_ranks
+
+    def get_item_genres(self, item_id):
+        query = """MATCH (i:Item {{item_id: {0}}})-[:OF_GENRE]->(g:Genre)
+                RETURN collect(g.name)""".format(item_id)
+        query_res = graph.cypher.execute(query)
+        if len(query_res) != 0:
+            genres = query_res[0][0]
+        else:
+            genres = []
+        return genres
 
     def create_item(self, label, item_obj):
         new_id = get_new_id()
@@ -69,15 +77,20 @@ class ItemUtils():
         return rtn_arr
 
     @staticmethod
-    def get_best(label):
-        query = """MATCH (u:User)-[r:RANKED]->(i:{0})
+    def get_best(label, genre=None):
+        where_clause = ''
+        if genre:
+            where_clause = ', (i)-[:OF_GENRE]->(g1:Genre) WHERE g1.name = "{0}"'.format(genre)
+
+        query = """MATCH (u:User)-[r:RANKED]->(i:{0})-[:OF_GENRE]->(g:Genre) {1}
                 RETURN i.item_id AS item_id
                       ,i.title AS title
                       ,i.poster_path AS poster_path
                       ,split(i.release_date, '-')[0] AS year
-                      ,COALESCE(AVG(r.rank), 0) as avg
+                      ,COALESCE(round(100 * AVG(r.rank)) / 100, 0) as avg
+                      ,COLLECT(distinct g.name) as genres
                 ORDER BY avg DESC 
-                LIMIT 25""".format(label)
+                LIMIT 25""".format(label, where_clause)
         print query
         queryRes = graph.cypher.execute(query)
         rtn_arr = []
@@ -89,15 +102,20 @@ class ItemUtils():
         return rtn_arr
 
     @staticmethod
-    def get_following_best(username, label):
-        query = """MATCH (u1:User {{username: '{0}'}})-[:FOLLOWS]->(u:User)-[r:RANKED]->(i:{1})
+    def get_following_best(username, label, genre=None):
+        where_clause = ''
+        if genre:
+            where_clause = ', (i)-[:OF_GENRE]->(g1:Genre) WHERE g1.name = "{0}"'.format(genre)
+
+        query = """MATCH (u1:User {{username: '{0}'}})-[:FOLLOWS]->(u:User)-[r:RANKED]->(i:{1})-[:OF_GENRE]->(g:Genre) {2}
                 RETURN i.item_id AS item_id
                       ,i.title AS title
                       ,i.poster_path AS poster_path
                       ,split(i.release_date, '-')[0] AS year
-                      ,COALESCE(AVG(r.rank), 0) as avg
+                      ,COALESCE(round(100 * AVG(r.rank)) / 100, 0) as avg
+                      ,COLLECT(distinct g.name) as genres
                 ORDER BY avg DESC 
-                LIMIT 25""".format(username, label)
+                LIMIT 25""".format(username, label, where_clause)
         print query
         queryRes = graph.cypher.execute(query)
         rtn_arr = []
@@ -119,3 +137,13 @@ class ItemUtils():
             return True
         else:
             return False
+
+    @staticmethod
+    def get_all_genres():
+        query = 'MATCH (g:Genre) RETURN COLLECT(g.name)'
+        query_res = graph.cypher.execute(query)
+        if len(query_res) != 0:
+            genres = query_res[0][0]
+        else:
+            genres = []
+        return genres

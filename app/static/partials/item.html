@@ -17,7 +17,11 @@
 				</select>
 			</div>
 			<button class="btn btn-default btn-block btn-xs reviewBtn"
-				ng-click="addReview()">{{reviewButton}}</button>
+				ng-click="addReview()">{{reviewButton}}
+			</button>
+			<div>
+				<span ng-repeat="genre in item.item_genres" class="label genre-label label-default">{{genre}}</span>
+			</div>
 		</div>
 	</div>
 	<div ng-show="showReview">

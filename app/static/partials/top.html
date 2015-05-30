@@ -6,6 +6,11 @@
 				ng-change="changeCategory()"
 				ng-options="category.label for category in categories"></select>
 		</p>
+		<p>
+			<select class="form-control" ng-model="selectedGenre"
+				ng-change="changeGenre()"
+				ng-options="genre as genre for genre in genreArr"></select>
+		</p>
 		<div id="headerGroup" class="row">
 			<span class="col-xs-6 headerGroupBtn" ng-click="getTopFollowing()"
 				ng-class="{selected : showFollowing}">Following</span> <span
@@ -23,8 +28,10 @@
 						<span>{{$index +1}}. </span>
 						<a href="#/item/{{item.item_id}}">{{item.title}} ({{item.year}})</a>
 					</h5>
-					
 					<p>rank: {{item.avg}}</p>
+					<p>
+						<span ng-repeat="genre in item.genres" class="label genre-label label-default">{{genre}}</span>
+					</p>
 					</div>
 				</div>
 			</li>

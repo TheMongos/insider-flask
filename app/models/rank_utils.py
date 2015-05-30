@@ -6,10 +6,11 @@ class RankUtils():
         query = """MATCH (u:User {{username: '{0}'}}), (i:Item {{item_id: {1}}})
 			        CREATE UNIQUE (u)-[r:RANKED]->(i)
 			        SET r.rank = {2}
+			        ,r.ts = timestamp()
 			        RETURN r.rank""".format(username, item_id, rank)
         queryRes = graph.cypher.execute(query)
         if len(queryRes) != 0:
-           	return True
+            return True
         else:
             return False
 
@@ -47,6 +48,7 @@ class RankUtils():
         query = """MATCH (u:User {{username: '{0}'}}), (i:Item {{item_id: {1}}})
                     CREATE UNIQUE (u)-[r:RANKED]->(i)
                     SET r.rank = {2}, r.review_text = '{3}'
+                    ,r.ts = timestamp()
                     RETURN r.rank""".format(username, item_id, rank, review_text)
         queryRes = graph.cypher.execute(query)
         if len(queryRes) != 0:

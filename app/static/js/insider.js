@@ -370,6 +370,14 @@ myApp.controller('top', function($scope,$resource, $location, $routeParams){
 	                     {label:'TV'}
 	                     ];
 
+	var Genres = $resource('/item/genres');
+		$scope.genreArr = Genres.query(function(res) {
+			$scope.genreArr.unshift('All');
+			$scope.selectedGenre = $scope.genreArr[0];
+		}, function(error) {
+			$location.path('/login').replace();
+		});
+
 	$scope.selectedCat = $scope.categories[0];
 	$scope.showFollowing = true;
 
@@ -382,11 +390,28 @@ myApp.controller('top', function($scope,$resource, $location, $routeParams){
 		}
 	}
 
-	$scope.getTopAll = function() {
+	$scope.changeGenre = function() {
+		if ($scope.showFollowing) {
+			if ($scope.selectedGenre == 'All') {
+				$scope.getTopFollowing();
+			} else {
+				$scope.getTopFollowing($scope.selectedGenre);
+			}
+		} else {
+			if ($scope.selectedGenre == 'All') {
+				$scope.getTopAll();
+			} else {
+				$scope.getTopAll($scope.selectedGenre);
+			}
+
+		}
+	}
+
+	$scope.getTopAll = function(genre) {
 		$scope.showFollowing = false;
 
 		//activation check 
-		var All = $resource('/best/:label', { label : $scope.selectedCat.label });
+		var All = $resource('/best/:label/:genre', { label : $scope.selectedCat.label, genre : genre });
 		$scope.itemsArr = All.query(function(res) {
 			console.log(res);
 		}, function(error) {
@@ -394,10 +419,10 @@ myApp.controller('top', function($scope,$resource, $location, $routeParams){
 		});	
 	}
 
-	$scope.getTopFollowing = function() {
+	$scope.getTopFollowing = function(genre) {
 		$scope.showFollowing = true;
 
-		var Following = $resource('/best/following/:label', { label : $scope.selectedCat.label });
+		var Following = $resource('/best/following/:label/:genre', { label : $scope.selectedCat.label, genre : genre });
 		$scope.itemsArr = Following.query(function(res) {
 			console.log(res);
 		}, function(error) {
