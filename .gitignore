@@ -6,6 +6,7 @@
 # External Packages #
 #####################
 venv/
+.idea/
 
 # OS generated files #
 ######################
