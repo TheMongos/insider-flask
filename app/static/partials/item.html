@@ -47,7 +47,7 @@
 	<div ng-hide="hideItem">
 		<h5 ng-click="followingRanks = !followingRanks">
 			<span class="text-muted">Following's rank: </span>
-			{{item.itemRanks.followingAvg}} ({{item.itemRanks.followingCount}} insiders)
+			{{item.itemRanks.followingAvg}} ({{item.itemRanks.followingCount}} mates)
 		</h5>
 		<ul ng-show="followingRanks">
 			<li ng-repeat="rank in ranksArr">
@@ -71,7 +71,7 @@
 			</li>
 		</ul>
 		<h5>
-			<span class="text-muted">Total rank: </span>{{item.itemRanks.totalAvg}} ({{item.itemRanks.totalCount}} insiders)
+			<span class="text-muted">Total rank: </span>{{item.itemRanks.totalAvg}} ({{item.itemRanks.totalCount}} mates)
 		</h5>
 		<button class="btn btn-primary" ng-click="showDescription()">description</button>
 		<p ng-show="description">{{item.itemDetails.overview}}</p>

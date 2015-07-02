@@ -1,0 +1,24 @@
+[2015-07-02 08:50:20 +0000] [28838] [INFO] Starting gunicorn 19.3.0
+[2015-07-02 08:50:20 +0000] [28838] [INFO] Listening at: http://127.0.0.1:8000 (28838)
+[2015-07-02 08:50:20 +0000] [28838] [INFO] Using worker: sync
+[2015-07-02 08:50:20 +0000] [28843] [INFO] Booting worker with pid: 28843
+[2015-07-02 10:21:20 +0000] [28838] [INFO] Handling signal: term
+[2015-07-02 10:21:20 +0000] [28843] [INFO] Worker exiting (pid: 28843)
+[2015-07-02 10:21:20 +0000] [28838] [INFO] Shutting down: Master
+[2015-07-02 10:21:22 +0000] [29262] [INFO] Starting gunicorn 19.3.0
+[2015-07-02 10:21:22 +0000] [29262] [INFO] Listening at: http://127.0.0.1:8000 (29262)
+[2015-07-02 10:21:22 +0000] [29262] [INFO] Using worker: sync
+[2015-07-02 10:21:22 +0000] [29267] [INFO] Booting worker with pid: 29267
+[2015-07-02 10:21:22 +0000] [29270] [INFO] Booting worker with pid: 29270
+[2015-07-02 10:21:22 +0000] [29271] [INFO] Booting worker with pid: 29271
+[2015-07-02 10:47:32 +0000] [29262] [INFO] Handling signal: term
+[2015-07-02 10:47:32 +0000] [29267] [INFO] Worker exiting (pid: 29267)
+[2015-07-02 10:47:32 +0000] [29270] [INFO] Worker exiting (pid: 29270)
+[2015-07-02 10:47:32 +0000] [29271] [INFO] Worker exiting (pid: 29271)
+[2015-07-02 10:47:33 +0000] [29262] [INFO] Shutting down: Master
+[2015-07-02 10:47:34 +0000] [30113] [INFO] Starting gunicorn 19.3.0
+[2015-07-02 10:47:34 +0000] [30113] [INFO] Listening at: http://127.0.0.1:8000 (30113)
+[2015-07-02 10:47:34 +0000] [30113] [INFO] Using worker: sync
+[2015-07-02 10:47:34 +0000] [30118] [INFO] Booting worker with pid: 30118
+[2015-07-02 10:47:34 +0000] [30119] [INFO] Booting worker with pid: 30119
+[2015-07-02 10:47:34 +0000] [30120] [INFO] Booting worker with pid: 30120
