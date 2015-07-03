@@ -17,3 +17,7 @@ venv/
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# Log directory #
+#################
+logs/
