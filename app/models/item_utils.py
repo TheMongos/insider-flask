@@ -1,5 +1,7 @@
 from py2neo import Node
 from . import graph
+from . import SQL_DB
+import sqlite3
 
 
 class ItemUtils():
@@ -42,7 +44,7 @@ class ItemUtils():
         return genres
 
     def create_item(self, label, item_obj):
-        new_id = get_new_id()
+        new_id = ItemUtils.get_new_id()
         item_obj['item_id'] = new_id
         item = Node("Item", label, **item_obj)
         rtn = graph.create(item)
@@ -61,14 +63,15 @@ class ItemUtils():
 
     @staticmethod
     def search_item(query):
+        item_ids_str = ItemUtils.search_item_in_sql(query)
         query = """MATCH (i:Item)
-                WHERE i.title =~ "(?i){0}.*"
+                WHERE i.item_id IN [{0}]
                 RETURN i.item_id AS item_id
                       ,i.title AS title
                       ,i.poster_path AS poster_path
                       ,split(i.release_date, '-')[0] as year
                       ,filter(x in labels(i) WHERE x <> 'Item')[0] AS label
-                LIMIT 25""".format(query)
+                LIMIT 25""".format(item_ids_str)
         print query
         queryRes = graph.cypher.execute(query)
         rtn_arr = []
@@ -150,3 +153,21 @@ class ItemUtils():
         else:
             genres = []
         return genres
+
+    @staticmethod
+    def search_item_in_sql(query):
+        query = """SELECT item_id
+                FROM Title
+                WHERE title LIKE '%{0}%'
+                LIMIT 25""".format(query)
+
+        print query
+        connection = sqlite3.connect(SQL_DB)
+        cursor = connection.cursor()
+        cursor.execute(query)
+        rows = cursor.fetchall()
+        result = []
+        for row in rows:
+            result.append(str(row[0]))
+        print result
+        return ','.join(result)

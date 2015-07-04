@@ -2,7 +2,9 @@ from py2neo import Graph, authenticate
 
 url = 'http://localhost:7474'
 username = 'neo4j'
-password = 'DavidElad1'
+password = 'u9wburvc'
+
+SQL_DB = "db/search_title.db"
 
 authenticate(url.strip('http://'), username, password)
 
