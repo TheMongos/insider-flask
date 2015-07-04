@@ -2,7 +2,6 @@
 ###################
 *.pyc
 
-
 # External Packages #
 #####################
 venv/
@@ -21,3 +20,7 @@ Thumbs.db
 # Log directory #
 #################
 logs/
+
+# DB direcotry #
+################
+db/

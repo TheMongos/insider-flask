@@ -1,11 +1,12 @@
 from py2neo import Graph, Node, Relationship, authenticate
 import json
+import ast
 # import requests
 
 url = 'http://localhost:7474'
 username = 'neo4j'
 password = 'DavidElad1'
-titles_file = 'tmdb_movies.txt'
+titles_file = '/home/recomate/tmdb/tmdb_movies.txt'
 label = 'Movie'
 
 authenticate(url.strip('http://'), username, password)
@@ -33,7 +34,10 @@ with open (titles_file, 'r') as f_in:
     more_than_one = 0
     no_genre_counter = 0
     for line in f_in:
-        obj = json.loads(line)
+	try:
+        	obj = json.loads(line)
+	except:
+		obj = ast.literal_eval(line)
         trailer_link = ''
         # if len(obj['genres']) == 0:
         try:
@@ -73,7 +77,7 @@ with open (titles_file, 'r') as f_in:
 
         counter = counter + 1
         # for debug
-        if counter == 100:
-            break
+        #if counter == 100:
+        #    break
 
 print counter
