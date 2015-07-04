@@ -1,4 +1,4 @@
-var myApp = angular.module('insider', ['ngRoute', 'ngResource']);
+var myApp = angular.module('recomate', ['ngRoute', 'ngResource']);
 
 myApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider){
 
