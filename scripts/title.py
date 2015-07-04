@@ -34,10 +34,10 @@ with open (titles_file, 'r') as f_in:
     more_than_one = 0
     no_genre_counter = 0
     for line in f_in:
-	try:
-        	obj = json.loads(line)
-	except:
-		obj = ast.literal_eval(line)
+        try:
+            obj = json.loads(line)
+        except:
+            obj = ast.literal_eval(line)
         trailer_link = ''
         # if len(obj['genres']) == 0:
         try:
