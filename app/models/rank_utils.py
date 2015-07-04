@@ -8,6 +8,7 @@ class RankUtils():
 			        SET r.rank = {2}
 			        ,r.ts = timestamp()
 			        RETURN r.rank""".format(username, item_id, rank)
+        print query
         queryRes = graph.cypher.execute(query)
         if len(queryRes) != 0:
             return True
@@ -21,6 +22,7 @@ class RankUtils():
                     , i.item_id as item_id
                     , i.title as title
                     , i.poster_path as poster_path""".format(username)
+        print query
         queryRes = graph.cypher.execute(query)
         rtn_arr = []
         for i in range(len(queryRes)):
@@ -35,6 +37,7 @@ class RankUtils():
                     RETURN r.rank as rank
                     , r.review_text as review_text
                     , u1.username as username""".format(username, item_id)
+        print query
         queryRes = graph.cypher.execute(query)
         rtn_arr = []
         for i in range(len(queryRes)):
@@ -50,6 +53,7 @@ class RankUtils():
                     SET r.rank = {2}, r.review_text = '{3}'
                     ,r.ts = timestamp()
                     RETURN r.rank""".format(username, item_id, rank, review_text)
+        print query
         queryRes = graph.cypher.execute(query)
         if len(queryRes) != 0:
             return True
@@ -60,6 +64,7 @@ class RankUtils():
         query = """MATCH (u:User {{username: '{0}'}})-[r:RANKED]->(i:Item {{item_id: {1}}})
                     REMOVE r.review_text
                     RETURN r.rank""".format(username, item_id)
+        print query
         queryRes = graph.cypher.execute(query)
         if len(queryRes) != 0:
             return True

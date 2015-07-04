@@ -74,6 +74,7 @@ class User(UserMixin):
         query = """MATCH (u1:User {{username: '{0}'}}), (u2:User {{username: '{1}'}}) 
         CREATE UNIQUE (u1)-[r:FOLLOWS]->(u2) 
         RETURN r""".format(self.username, user_follow_username)
+        print query
         queryRes = graph.cypher.execute(query)
 
         if len(queryRes):
@@ -94,6 +95,7 @@ class User(UserMixin):
         count(u3) as userFollowingCount, 
         count(u4) as userFollowersCount, 
         '{0}' = '{1}' as isMyAccount""".format(username, self.username)
+        print query
         queryRes = graph.cypher.execute(query)
         if len(queryRes) != 0:
             keys = queryRes.columns
@@ -107,6 +109,7 @@ class User(UserMixin):
     def getUserFollowing(self):
         query = """MATCH (u1:User {{username: '{0}'}})-[:FOLLOWS]->(u2:User) 
         RETURN u2.username as username""".format(self.username)
+        print query
         query_res = graph.cypher.execute(query)
         res_arr = []
         for i in range(len(query_res)):
@@ -116,6 +119,7 @@ class User(UserMixin):
     def getUserFollowers(self):
         query = """MATCH (u1:User {{username: '{0}'}})<-[:FOLLOWS]-(u2:User) 
         RETURN u2.username as username""".format(self.username)
+        print query
         query_res = graph.cypher.execute(query)
         res_arr = []
         for i in range(len(query_res)):
@@ -127,6 +131,7 @@ class User(UserMixin):
         query = """MATCH (u:User) 
                 WHERE u.username =~ "(?i){0}.*" 
                 RETURN u.username as username""".format(query)
+        print query
         query_res = graph.cypher.execute(query)
         res_arr = []
         for i in range(len(query_res)):

@@ -21,6 +21,7 @@ class ItemUtils():
                 , r2.review_text as review_text
                 , count(distinct u3) as followingCount
                 , round(100 * avg(r3.rank)) / 100 as followingAvg""".format(username, item_id)
+        print query
         queryRes = graph.cypher.execute(query)
         if len(queryRes) != 0:
             keys = queryRes.columns
@@ -53,6 +54,7 @@ class ItemUtils():
                 ON CREATE SET nid.count = 1
                 ON MATCH SET nid.count = nid.count + 1
                 RETURN nid.count"""
+        print query
         new_id = graph.cypher.execute(query)[0][0]
 
         return new_id
@@ -67,6 +69,7 @@ class ItemUtils():
                       ,split(i.release_date, '-')[0] as year
                       ,filter(x in labels(i) WHERE x <> 'Item')[0] AS label
                 LIMIT 25""".format(query)
+        print query
         queryRes = graph.cypher.execute(query)
         rtn_arr = []
         for i in range(len(queryRes)):
