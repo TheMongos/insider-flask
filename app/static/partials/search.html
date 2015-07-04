@@ -23,7 +23,7 @@
 				<a href="#/item/{{item.item_id}}">
 				<div class="row">
 				<img class="col-xs-4" fallback-src="/static/images/items/default.jpg"
-					ng-src="http://image.tmdb.org/t/p/h632/{{item.poster_path}}">
+					ng-src="http://image.tmdb.org/t/p/w342/{{item.poster_path}}">
 					<h5 class="col-xs-8">{{item.title}} ({{item.year}})</h5></div></a>
 					
 			</li>
@@ -31,7 +31,7 @@
 				ng-repeat="item in itemArr"><a href="#/item/{{item.item_id}}">
 				<div class="row">
 				<img class="col-xs-4" fallback-src="/static/images/items/default.jpg"
-					ng-src="http://image.tmdb.org/t/p/h632/{{item.poster_path}}"> 
+					ng-src="http://image.tmdb.org/t/p/w342/{{item.poster_path}}"> 
 					<h5 class="col-xs-8">{{item.title}} ({{item.year}})</h5></div></a>
 			</li>
 			<li ng-if="isUser" ng-repeat="username in userArr"><a
