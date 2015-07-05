@@ -71,6 +71,7 @@ class ItemUtils():
                       ,i.poster_path AS poster_path
                       ,split(i.release_date, '-')[0] as year
                       ,filter(x in labels(i) WHERE x <> 'Item')[0] AS label
+		ORDER BY i.popularity DESC
                 LIMIT 25""".format(item_ids_str)
         print query
         queryRes = graph.cypher.execute(query)
@@ -159,6 +160,7 @@ class ItemUtils():
         query = """SELECT item_id
                 FROM Title
                 WHERE title LIKE '%{0}%'
+		ORDER BY popularity DESC
                 LIMIT 25""".format(query)
 
         print query
