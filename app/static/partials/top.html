@@ -22,7 +22,7 @@
 		<ul>
 			<li ng-repeat="item in itemsArr">
 				<div class="row">
-					<a href="#/item/{{item.item_id}}"><img class="col-xs-4" fallback-src="/static/images/items/default.jpg" ng-src="http://image.tmdb.org/t/p/w342/{{item.poster_path}}" /></a>
+					<a href="#/item/{{item.item_id}}"><img class="col-xs-4 img-thumbnail" fallback-src="/static/images/items/default.jpg" ng-src="http://image.tmdb.org/t/p/w342/{{item.poster_path}}" /></a>
 					<div class="col-xs-8">
 					<h5>
 						<span>{{$index +1}}. </span>
