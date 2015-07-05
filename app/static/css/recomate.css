@@ -74,7 +74,7 @@ footer#navigator {
 	border-right:none;
 }
 
-.img-thumbnail img {
+img.img-thumbnail {
 	padding-left: 4px;
 	padding-right: 4px;
 }
