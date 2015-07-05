@@ -4,6 +4,7 @@ general
 body {
 	padding-bottom: 50px;
 	padding-top: 60px;
+	font-family: 'Open Sans', sans-serif;
 }
 
 .selected {
