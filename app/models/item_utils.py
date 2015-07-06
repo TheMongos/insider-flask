@@ -86,8 +86,10 @@ class ItemUtils():
     @staticmethod
     def get_best(label, genre=None):
         where_clause = ''
+	add_genre_to_array = ''
         if genre:
             where_clause = ', (i)-[:OF_GENRE]->(g1:Genre) WHERE g1.name = "{0}"'.format(genre)
+	    add_genre_to_array = '+ "{0}"'.format(genre)
 
         query = """MATCH (u:User)-[r:RANKED]->(i:{0})-[:OF_GENRE]->(g:Genre) {1}
                 RETURN i.item_id AS item_id
@@ -95,9 +97,9 @@ class ItemUtils():
                       ,i.poster_path AS poster_path
                       ,split(i.release_date, '-')[0] AS year
                       ,COALESCE(round(100 * AVG(r.rank)) / 100, 0) as avg
-                      ,COLLECT(distinct g.name) as genres
+                      ,COLLECT(distinct g.name) {2} as genres
                 ORDER BY avg DESC 
-                LIMIT 25""".format(label, where_clause)
+                LIMIT 25""".format(label, where_clause, add_genre_to_array)
         print query
         queryRes = graph.cypher.execute(query)
         rtn_arr = []
@@ -111,8 +113,10 @@ class ItemUtils():
     @staticmethod
     def get_following_best(username, label, genre=None):
         where_clause = ''
+	add_genre_to_array = ''
         if genre:
             where_clause = ', (i)-[:OF_GENRE]->(g1:Genre) WHERE g1.name = "{0}"'.format(genre)
+	    add_genre_to_array = '+ "{0}"'.format(genre)
 
         query = """MATCH (u1:User {{username: '{0}'}})-[:FOLLOWS]->(u:User)-[r:RANKED]->(i:{1})-[:OF_GENRE]->(g:Genre) {2}
                 RETURN i.item_id AS item_id
@@ -120,9 +124,9 @@ class ItemUtils():
                       ,i.poster_path AS poster_path
                       ,split(i.release_date, '-')[0] AS year
                       ,COALESCE(round(100 * AVG(r.rank)) / 100, 0) as avg
-                      ,COLLECT(distinct g.name) as genres
+                      ,COLLECT(distinct g.name) {3} as genres
                 ORDER BY avg DESC 
-                LIMIT 25""".format(username, label, where_clause)
+                LIMIT 25""".format(username, label, where_clause, add_genre_to_array)
         print query
         queryRes = graph.cypher.execute(query)
         rtn_arr = []
