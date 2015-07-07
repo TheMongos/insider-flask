@@ -462,6 +462,7 @@ myApp.controller('search', function($scope,$resource, $location, $routeParams){
 
 	$scope.search = function(){
 		if (typeof $scope.searchText != 'undefined')
+			$scope.userArr = $scope.itemArr = null;
 			$scope.loading = true;
 
 		if($scope.searchText) {
