@@ -17,6 +17,9 @@
 				ng-class="{selected : isUser}">User</span>
 		</div>
 	</div>
+	<div class="spinner text-center" ng-show="loading">
+		<i class="fa fa-cog fa-spin fa-3x fa-fw margin-bottom"></i>
+	</div>
 	<div>
 		<ul>
 			<li ng-if="item.label == 'TV' && isTv" ng-repeat="item in itemArr">

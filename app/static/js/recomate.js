@@ -461,24 +461,33 @@ myApp.controller('search', function($scope,$resource, $location, $routeParams){
 	}
 
 	$scope.search = function(){
+		if (typeof $scope.searchText != 'undefined')
+			$scope.loading = true;
+
 		if($scope.searchText) {
 			if ($scope.isUser) { 
 				var SearchUser = $resource('/search/user/:query', { query : $scope.searchText });
 
-				$scope.userArr = SearchUser.query(function(res) {
+				SearchUser.query(function(res) {
+					$scope.userArr = res;
 					console.log(res);
 					// do something
 				}, function(error) {
 					$location.path('/login').replace();
+				}).$promise.finally(function() {
+					$scope.loading = false;
 				});
 			} else { 
 				var SearchItem = $resource('/search/item/:query', { query : $scope.searchText });
 
-				$scope.itemArr = SearchItem.query(function(res) {
+				SearchItem.query(function(res) {
+					$scope.itemArr = res;
 					console.log(res);
 					// do something
 				}, function(error) {
 					$location.path('/login').replace();
+				}).$promise.finally(function() {
+					$scope.loading = false;
 				});
 			}
 		}
