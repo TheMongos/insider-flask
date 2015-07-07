@@ -3,6 +3,7 @@ from flask_login import LoginManager
 from models.user import User
 
 login_manager = LoginManager()
+login_manager.session_protection = 'strong'
 
 def create_app(config=None):
     app = Flask(__name__)
