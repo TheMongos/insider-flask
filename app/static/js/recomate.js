@@ -238,6 +238,10 @@ myApp.controller('item', function($scope,$resource, $location, $routeParams){
 		$scope.item = res;
 		$scope.reviewButton = "write review";
 
+		if (!$scope.item.itemDetails.hasOwnProperty('poster_path')) {
+			$scope.item.itemDetails.poster_path = false;
+		}
+
 		if (res.itemRanks.rank) {
 			$scope.myRank = res.itemRanks.rank;
 			$scope.reviewText = res.itemRanks.review_text;
