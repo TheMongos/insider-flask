@@ -6,7 +6,7 @@ login_manager = LoginManager()
 
 def create_app(config=None):
     app = Flask(__name__)
-    app.secret_key = 'pitzkachuckgurgur'
+    app.secret_key = '\xa4\xb5 uzv\x8f\xffyg\xa8<\xc5h\x83\x92Dr)\x81\xddqA5'
     # TODO: add configuration module
     # app.config.from_object(config[config_name])
     # config[config_name].init_app(app)
