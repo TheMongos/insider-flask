@@ -461,9 +461,10 @@ myApp.controller('search', function($scope,$resource, $location, $routeParams){
 	}
 
 	$scope.search = function(){
-		if (typeof $scope.searchText != 'undefined')
+		if (typeof $scope.searchText != 'undefined') {
 			$scope.userArr = $scope.itemArr = null;
 			$scope.loading = true;
+		}
 
 		if($scope.searchText) {
 			if ($scope.isUser) { 
@@ -476,7 +477,7 @@ myApp.controller('search', function($scope,$resource, $location, $routeParams){
 				}, function(error) {
 					$location.path('/login').replace();
 				}).$promise.finally(function() {
-					//$scope.loading = false;
+					$scope.loading = false;
 				});
 			} else { 
 				var SearchItem = $resource('/search/item/:query', { query : $scope.searchText });
