@@ -160,18 +160,18 @@ class ItemUtils():
         return genres
 
     @staticmethod
-    def search_item_in_sql(query):
+    def search_item_in_sql(query_text):
         query = """SELECT item_id
                 FROM Title
-                WHERE title LIKE '%{0}%'
+                WHERE title LIKE ? 
 		ORDER BY popularity DESC
-                LIMIT 25""".format(query)
-
+                LIMIT 25"""
+	
         print query
         connection = sqlite3.connect(SQL_DB)
         cursor = connection.cursor()
-        cursor.execute(query)
-        rows = cursor.fetchall()
+	cursor.execute(query, ('%{}%'.format(query_text),))
+	rows = cursor.fetchall()
         result = []
         for row in rows:
             result.append(str(row[0]))
