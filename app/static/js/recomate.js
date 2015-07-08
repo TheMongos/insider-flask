@@ -1,4 +1,4 @@
-var myApp = angular.module('recomate', ['ngRoute', 'ngResource']);
+var myApp = angular.module('recomate', ['ngRoute', 'ngResource', 'imagesLoaded']);
 
 myApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider){
 
@@ -476,7 +476,7 @@ myApp.controller('search', function($scope,$resource, $location, $routeParams){
 				}, function(error) {
 					$location.path('/login').replace();
 				}).$promise.finally(function() {
-					$scope.loading = false;
+					//$scope.loading = false;
 				});
 			} else { 
 				var SearchItem = $resource('/search/item/:query', { query : $scope.searchText });
@@ -493,6 +493,10 @@ myApp.controller('search', function($scope,$resource, $location, $routeParams){
 			}
 		}
 	}
+	
+	$scope.$on('ALWAYS', function() {
+		//$scope.loading = false;
+    	});
 });
 
 myApp.controller('following', function($scope,$resource, $location, $routeParams){
