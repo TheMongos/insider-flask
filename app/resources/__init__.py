@@ -18,3 +18,9 @@ def authenticate_admin():
 	else:
 		return redirect('/')
 
+import sys
+
+@api_bp.after_request
+def flush_logs(response):
+	sys.stdout.flush()
+	return response

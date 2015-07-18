@@ -71,6 +71,7 @@ class ItemUtils():
                       ,i.poster_path AS poster_path
                       ,split(i.release_date, '-')[0] as year
                       ,filter(x in labels(i) WHERE x <> 'Item')[0] AS label
+		ORDER BY i.popularity DESC
                 LIMIT 25""".format(item_ids_str)
         print query
         queryRes = graph.cypher.execute(query)
@@ -85,8 +86,10 @@ class ItemUtils():
     @staticmethod
     def get_best(label, genre=None):
         where_clause = ''
+	add_genre_to_array = ''
         if genre:
             where_clause = ', (i)-[:OF_GENRE]->(g1:Genre) WHERE g1.name = "{0}"'.format(genre)
+	    add_genre_to_array = '+ "{0}"'.format(genre)
 
         query = """MATCH (u:User)-[r:RANKED]->(i:{0})-[:OF_GENRE]->(g:Genre) {1}
                 RETURN i.item_id AS item_id
@@ -94,9 +97,9 @@ class ItemUtils():
                       ,i.poster_path AS poster_path
                       ,split(i.release_date, '-')[0] AS year
                       ,COALESCE(round(100 * AVG(r.rank)) / 100, 0) as avg
-                      ,COLLECT(distinct g.name) as genres
+                      ,COLLECT(distinct g.name) {2} as genres
                 ORDER BY avg DESC 
-                LIMIT 25""".format(label, where_clause)
+                LIMIT 25""".format(label, where_clause, add_genre_to_array)
         print query
         queryRes = graph.cypher.execute(query)
         rtn_arr = []
@@ -110,8 +113,10 @@ class ItemUtils():
     @staticmethod
     def get_following_best(username, label, genre=None):
         where_clause = ''
+	add_genre_to_array = ''
         if genre:
             where_clause = ', (i)-[:OF_GENRE]->(g1:Genre) WHERE g1.name = "{0}"'.format(genre)
+	    add_genre_to_array = '+ "{0}"'.format(genre)
 
         query = """MATCH (u1:User {{username: '{0}'}})-[:FOLLOWS]->(u:User)-[r:RANKED]->(i:{1})-[:OF_GENRE]->(g:Genre) {2}
                 RETURN i.item_id AS item_id
@@ -119,9 +124,9 @@ class ItemUtils():
                       ,i.poster_path AS poster_path
                       ,split(i.release_date, '-')[0] AS year
                       ,COALESCE(round(100 * AVG(r.rank)) / 100, 0) as avg
-                      ,COLLECT(distinct g.name) as genres
+                      ,COLLECT(distinct g.name) {3} as genres
                 ORDER BY avg DESC 
-                LIMIT 25""".format(username, label, where_clause)
+                LIMIT 25""".format(username, label, where_clause, add_genre_to_array)
         print query
         queryRes = graph.cypher.execute(query)
         rtn_arr = []
@@ -155,17 +160,18 @@ class ItemUtils():
         return genres
 
     @staticmethod
-    def search_item_in_sql(query):
+    def search_item_in_sql(query_text):
         query = """SELECT item_id
                 FROM Title
-                WHERE title LIKE '%{0}%'
-                LIMIT 25""".format(query)
-
+                WHERE title LIKE ? 
+		ORDER BY popularity DESC
+                LIMIT 25"""
+	
         print query
         connection = sqlite3.connect(SQL_DB)
         cursor = connection.cursor()
-        cursor.execute(query)
-        rows = cursor.fetchall()
+	cursor.execute(query, ('%{}%'.format(query_text),))
+	rows = cursor.fetchall()
         result = []
         for row in rows:
             result.append(str(row[0]))

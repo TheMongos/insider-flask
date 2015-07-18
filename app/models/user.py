@@ -91,8 +91,8 @@ class User(UserMixin):
         u1.first_name as first_name,
         u1.role as role,
         u1.last_name as last_name,
-        r IS NOT NULL as isFollowing, 
-        count(distinct u3) as userFollowingCount,
+        r IS NOT NULL as isFollowing,
+        count(distinct u3) as userFollowingCount, 
         count(distinct u4) as userFollowersCount,
         '{0}' = '{1}' as isMyAccount""".format(username, self.username)
         print query

@@ -1,4 +1,4 @@
-var myApp = angular.module('recomate', ['ngRoute', 'ngResource']);
+var myApp = angular.module('recomate', ['ngRoute', 'ngResource', 'imagesLoaded']);
 
 myApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider){
 
@@ -239,6 +239,10 @@ myApp.controller('item', function($scope,$resource, $location, $routeParams){
 		console.log($scope.item);
 		$scope.reviewButton = "write review";
 
+		if (!$scope.item.itemDetails.hasOwnProperty('poster_path')) {
+			$scope.item.itemDetails.poster_path = false;
+		}
+
 		if (res.itemRanks.rank) {
 			$scope.myRank = res.itemRanks.rank;
 			$scope.reviewText = res.itemRanks.review_text;
@@ -463,28 +467,43 @@ myApp.controller('search', function($scope,$resource, $location, $routeParams){
 	}
 
 	$scope.search = function(){
+		if (typeof $scope.searchText != 'undefined') {
+			$scope.userArr = $scope.itemArr = null;
+			$scope.loading = true;
+		}
+
 		if($scope.searchText) {
 			if ($scope.isUser) { 
 				var SearchUser = $resource('/search/user/:query', { query : $scope.searchText });
 
-				$scope.userArr = SearchUser.query(function(res) {
+				SearchUser.query(function(res) {
+					$scope.userArr = res;
 					console.log(res);
 					// do something
 				}, function(error) {
 					$location.path('/login').replace();
+				}).$promise.finally(function() {
+					$scope.loading = false;
 				});
 			} else { 
 				var SearchItem = $resource('/search/item/:query', { query : $scope.searchText });
 
-				$scope.itemArr = SearchItem.query(function(res) {
+				SearchItem.query(function(res) {
+					$scope.itemArr = res;
 					console.log(res);
 					// do something
 				}, function(error) {
 					$location.path('/login').replace();
+				}).$promise.finally(function() {
+					$scope.loading = false;
 				});
 			}
 		}
 	}
+	
+	$scope.$on('ALWAYS', function() {
+		//$scope.loading = false;
+    	});
 });
 
 myApp.controller('following', function($scope,$resource, $location, $routeParams){

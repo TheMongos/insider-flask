@@ -4,6 +4,7 @@ general
 body {
 	padding-bottom: 50px;
 	padding-top: 60px;
+	font-family: 'Open Sans', sans-serif;
 }
 
 .selected {
@@ -71,6 +72,15 @@ footer#navigator {
 
 #navigator #navigator-icons a:last-child {
 	border-right:none;
+}
+
+img.img-thumbnail {
+	padding-left: 4px;
+	padding-right: 4px;
+}
+
+.spinner {
+	
 }
 
 /*
@@ -150,7 +160,7 @@ header
 
 #singupTemplate form {
 	margin-bottom: 10px;
-	
+
 }
 
 .genre-label {
