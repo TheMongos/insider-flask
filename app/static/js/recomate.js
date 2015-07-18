@@ -53,17 +53,6 @@ myApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $l
 	});
 }]);
 
-myApp.directive('fallbackSrc', function () {
-	var fallbackSrc = {
-			link: function postLink(scope, iElement, iAttrs) {
-				iElement.bind('error', function() {
-					angular.element(this).attr("src", iAttrs.fallbackSrc);
-				});
-			}
-	}
-	return fallbackSrc;
-});
-
 myApp.controller('login', function($scope,$resource, $location){
 	$('#navigator').css("display","none");
 	var Login = $resource('/login');
@@ -135,6 +124,7 @@ myApp.controller('user', function($scope, $resource, $location, $routeParams, Up
 		$scope.res = res;
 		$scope.user = res.user;
 		//$scope.userDetails = res.user.userDetails;
+		$scope.currDate = (new Date()).getTime();
 
 		getRanks(res.user.username);
 		if(res.user.isMyAccount){
@@ -150,6 +140,10 @@ myApp.controller('user', function($scope, $resource, $location, $routeParams, Up
 				$('#follow').addClass("btn-primary");
 			}
 		}
+
+		$("img").error(function(){
+	        $(this).attr('src', $(this).attr('fallback-src'));
+		});
 
 	}, function (error){
 		$location.path('/login').replace();
@@ -200,9 +194,6 @@ myApp.controller('user', function($scope, $resource, $location, $routeParams, Up
 		})
 	}
 
-	$("img").error(function(){
-        $(this).attr('src',  $(this).attr('fallback-src'));
-	});
 
 	$scope.admin = function (){
 		$location.path('/admin/search').replace();
@@ -226,21 +217,6 @@ myApp.controller('user', function($scope, $resource, $location, $routeParams, Up
         }
     };
 
-	$scope.clickToOpen = function () {
-    	ngDialog.open({ template: 'static/partials/popupTmpl.html' });
-	};
-});
-
-myApp.directive('noCacheSrc', function($window) {
-  return {
-    priority: 99,
-    link: function(scope, element, attrs) {
-      attrs.$observe('noCacheSrc', function(noCacheSrc) {
-        noCacheSrc += '?' + (new Date()).getTime();
-        attrs.$set('src', noCacheSrc);
-      });
-    }
-  }
 });
 
 myApp.controller('changeItem', function($scope,$resource, $location, $routeParams){

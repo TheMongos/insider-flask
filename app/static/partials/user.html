@@ -1,7 +1,7 @@
 <div id="userTemplate" class="container-fluid">
 	<div class="row page-header">
 		<div id="userImg" class="col-md-6 col-xs-6">
-			<img fallback-src="/static/images/users/default.jpg" no-cache-src="/static/images/users/{{user.username}}.jpg"
+			<img fallback-src="/static/images/users/default.jpg" ng-src="/static/images/users/{{user.username}}.jpg?{{currDate}}"
 				class="img-rounded img-responsive"
 				ngf-src="preview" />
 			<div id="imageUpload" class="button glyphicon glyphicon-camera" aria-hidden="true"
