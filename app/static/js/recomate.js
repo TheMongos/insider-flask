@@ -269,6 +269,7 @@ myApp.controller('item', function($scope,$resource, $location, $routeParams){
 	var Item = $resource('/item/:item_id', {item_id: $routeParams.item_id});
 	Item.get(function(res){
 		$scope.item = res;
+		console.log($scope.item);
 		$scope.reviewButton = "write review";
 
 		if (!$scope.item.itemDetails.hasOwnProperty('poster_path')) {
@@ -284,6 +285,10 @@ myApp.controller('item', function($scope,$resource, $location, $routeParams){
 
 		if($scope.item.itemRanks.followingAvg == null){
 			$scope.item.itemRanks.followingAvg = '-';
+		}
+
+		if(!('poster_path' in $scope.item.itemDetails)){
+			$scope.item.itemDetails.poster_path = null;
 		}
 
 		$scope.getFollowingRanks();
@@ -397,6 +402,7 @@ myApp.controller('item', function($scope,$resource, $location, $routeParams){
 	}
 
 	$("img").error(function(){
+		console.log("error in image");
         $(this).attr('src',  $(this).attr('fallback-src'));
 	});
 });
