@@ -5,7 +5,7 @@ from models.user import User
 login_manager = LoginManager()
 login_manager.session_protection = 'strong'
 
-UPLOAD_FOLDER = '/Users/davidtzoor/Documents/Development/recomate/app/static/images/users/'
+UPLOAD_FOLDER = 'app/static/images/users/'
 ALLOWED_EXTENSIONS = set(['jpg'])
 
 def create_app(config=None):
