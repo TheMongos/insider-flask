@@ -24,3 +24,8 @@ logs/
 # DB direcotry #
 ################
 db/
+
+# jpeg files #
+##############
+app/static/images/users/*
+app/static/images/items/*
