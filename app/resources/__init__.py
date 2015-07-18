@@ -7,7 +7,7 @@ admin_bp = Blueprint('admin', __name__, static_folder='static', static_url_path=
 api = Api(api_bp)
 admin_api = Api(admin_bp)
 
-from . import index, best, item, login, logout, signup, rank, review, search, user, admin
+from . import index, best, item, login, logout, signup, rank, review, search, user, admin, upload
 
 @admin_bp.before_request
 def authenticate_admin():

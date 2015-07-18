@@ -1,4 +1,4 @@
-var myApp = angular.module('recomate', ['ngRoute', 'ngResource', 'imagesLoaded']);
+var myApp = angular.module('recomate', ['ngRoute', 'ngResource', 'ngFileUpload', 'ngDialog']);
 
 myApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider){
 
@@ -74,7 +74,7 @@ myApp.controller('login', function($scope,$resource, $location){
 		Login.save(obj, function(res){
 			$('#navigator').css("display","block");
 			$location.path('/user').replace();
-		}, 
+		},
 		function(error){
 			console.log(error);
 			if(error.status == 401){
@@ -111,7 +111,7 @@ myApp.controller('signup', function($scope,$resource, $location){
 			Login.save(obj, function(res){
 				$('#navigator').css("display","block");
 				$location.path('/login').replace();
-			}, 
+			},
 			function(error){
 				if(error.status == 409){
 					$scope.message = error.data.message;
@@ -123,7 +123,7 @@ myApp.controller('signup', function($scope,$resource, $location){
 });
 
 
-myApp.controller('user', function($scope,$resource, $location, $routeParams){
+myApp.controller('user', function($scope, $resource, $location, $routeParams, Upload, ngDialog){
 	var User;
 	if($routeParams.user_id){
 		User = $resource('/user/:user_id', {user_id: $routeParams.user_id});
@@ -153,7 +153,7 @@ myApp.controller('user', function($scope,$resource, $location, $routeParams){
 
 	}, function (error){
 		$location.path('/login').replace();
-	});	
+	});
 
 	function getRanks(username){
 		var Ranks = $resource('/rank/:username', {username: username});
@@ -172,7 +172,7 @@ myApp.controller('user', function($scope,$resource, $location, $routeParams){
 			$(reviewBtn).html("close review");
 			$scope[str2] = true;
 			$scope.ranksArr[index].isOpen = true;
-		}	
+		}
 	};
 
 	$scope.startFollowing = function(username){
@@ -199,7 +199,7 @@ myApp.controller('user', function($scope,$resource, $location, $routeParams){
 			$location.path('/login').replace();
 		})
 	}
-	
+
 	$("img").error(function(){
         $(this).attr('src',  $(this).attr('fallback-src'));
 	});
@@ -208,6 +208,39 @@ myApp.controller('user', function($scope,$resource, $location, $routeParams){
 		$location.path('/admin/search').replace();
 	}
 
+	$scope.upload = function (files) {
+        if (files && files.length == 1) {
+            var file = files[0];
+            $scope.preview = file;
+            Upload.upload({
+                url: '/upload',
+                file: file
+            }).progress(function (evt) {
+                var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
+            }).success(function (data, status, headers, config) {
+                console.log('file ' + config.file.name + 'uploaded. Response: ' + data);
+            }).error(function (data, status, headers, config) {
+                console.log('error status: ' + status);
+            })
+        }
+    };
+
+	$scope.clickToOpen = function () {
+    	ngDialog.open({ template: 'static/partials/popupTmpl.html' });
+	};
+});
+
+myApp.directive('noCacheSrc', function($window) {
+  return {
+    priority: 99,
+    link: function(scope, element, attrs) {
+      attrs.$observe('noCacheSrc', function(noCacheSrc) {
+        noCacheSrc += '?' + (new Date()).getTime();
+        attrs.$set('src', noCacheSrc);
+      });
+    }
+  }
 });
 
 myApp.controller('changeItem', function($scope,$resource, $location, $routeParams){
@@ -217,7 +250,7 @@ myApp.controller('changeItem', function($scope,$resource, $location, $routeParam
 		// $scope.title = res.itemDetails.title;
 	}, function (error){
 		$location.path('/login').replace();
-	});	
+	});
 
 
 	$scope.changeItem = function (key, value){
@@ -256,7 +289,7 @@ myApp.controller('item', function($scope,$resource, $location, $routeParams){
 		$scope.getFollowingRanks();
 	}, function (error){
 		$location.path('/login').replace();
-	});	
+	});
 
 	$scope.showDescription = function() {
 		if ($scope.description) {
@@ -290,7 +323,7 @@ myApp.controller('item', function($scope,$resource, $location, $routeParams){
 			$scope.reviewButton = "close review";
 			$scope.showReview =true;
 			$scope.hideItem = true;
-		}	
+		}
 	}
 
 	$scope.sendReview = function(){
@@ -347,7 +380,7 @@ myApp.controller('item', function($scope,$resource, $location, $routeParams){
 			$(reviewBtn).html("close review");
 			$scope[str2] = true;
 			$scope.ranksArr[index].isOpen = true;
-		}	
+		}
 	};
 
 
@@ -362,7 +395,7 @@ myApp.controller('item', function($scope,$resource, $location, $routeParams){
 			$location.path('/login').replace();
 		});
 	}
-	
+
 	$("img").error(function(){
         $(this).attr('src',  $(this).attr('fallback-src'));
 	});
@@ -414,13 +447,13 @@ myApp.controller('top', function($scope,$resource, $location, $routeParams){
 	$scope.getTopAll = function(genre) {
 		$scope.showFollowing = false;
 
-		//activation check 
+		//activation check
 		var All = $resource('/best/:label/:genre', { label : $scope.selectedCat.label, genre : genre });
 		$scope.itemsArr = All.query(function(res) {
 			console.log(res);
 		}, function(error) {
 			$location.path('/login').replace();
-		});	
+		});
 	}
 
 	$scope.getTopFollowing = function(genre) {
@@ -431,7 +464,7 @@ myApp.controller('top', function($scope,$resource, $location, $routeParams){
 			console.log(res);
 		}, function(error) {
 			$location.path('/login').replace();
-		});	
+		});
 	}
 
 	//initial
@@ -453,7 +486,7 @@ myApp.controller('search', function($scope,$resource, $location, $routeParams){
 		} else if (clicked == "user"){
 			$scope.isUser = true; $scope.isMovie = false; $scope.isTv = false;
 			$scope.search();
-		} 
+		}
 
 		if(isUserTemp){
 			$scope.search();
@@ -467,7 +500,7 @@ myApp.controller('search', function($scope,$resource, $location, $routeParams){
 		}
 
 		if($scope.searchText) {
-			if ($scope.isUser) { 
+			if ($scope.isUser) {
 				var SearchUser = $resource('/search/user/:query', { query : $scope.searchText });
 
 				SearchUser.query(function(res) {
@@ -479,7 +512,7 @@ myApp.controller('search', function($scope,$resource, $location, $routeParams){
 				}).$promise.finally(function() {
 					$scope.loading = false;
 				});
-			} else { 
+			} else {
 				var SearchItem = $resource('/search/item/:query', { query : $scope.searchText });
 
 				SearchItem.query(function(res) {
@@ -494,7 +527,7 @@ myApp.controller('search', function($scope,$resource, $location, $routeParams){
 			}
 		}
 	}
-	
+
 	$scope.$on('ALWAYS', function() {
 		//$scope.loading = false;
     	});
@@ -508,7 +541,7 @@ myApp.controller('following', function($scope,$resource, $location, $routeParams
 	},
 	function (error){
 		$location.path('/login').replace();
-	});	
+	});
 });
 
 myApp.controller('followers', function($scope,$resource, $location, $routeParams){

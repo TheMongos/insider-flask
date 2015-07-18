@@ -80,7 +80,11 @@ img.img-thumbnail {
 }
 
 .spinner {
-	
+
+}
+
+.img-thumbnail {
+	min-height: 235px;
 }
 
 /*
@@ -131,6 +135,18 @@ header
 
 #userTemplate #userDetails button.follow {
 	pointer-events: none;
+}
+
+#userTemplate #imageUpload {
+	position: absolute;
+	left: 22px;
+	top: 5px;
+	font-size: 1.5em;
+	color: white;
+	opacity: 0.8;
+	border:0;
+	background:none;
+	text-shadow: 0 0 5px black;
 }
 
 /*
