@@ -20,7 +20,7 @@
 	</div>
 	<div>
 		<ul>
-			<li ng-repeat="item in itemsArr">
+			<li ng-repeat="item in itemsArr" my-repeat-directive>   <!--repeat-complete="invokeRanking(itemsArr)"-->
 				<div class="row">
 					<a href="#/item/{{item.item_id}}"><img class="col-xs-4 img-thumbnail" fallback-src="/static/images/items/default.jpg" ng-src="//image.tmdb.org/t/p/w342/{{item.poster_path}}" /></a>
 					<div class="col-xs-8">
@@ -28,7 +28,7 @@
 						<span>{{$index +1}}. </span>
 						<a href="#/item/{{item.item_id}}">{{item.title}} ({{item.year}})</a>
 					</h5>
-					<p>rank: {{item.avg}}</p>
+					<p>rank:  <input id="rank{{item.item_id}}" class="input-rank" type="text"></p>
 					<p>
 						<span ng-repeat="genre in item.genres" class="label genre-label label-default">{{genre}}</span>
 					</p>

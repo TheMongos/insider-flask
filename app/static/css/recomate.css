@@ -83,6 +83,9 @@ img.img-thumbnail {
 
 }
 
+.star-rating {
+	display: inline-block;
+}
 /*
 header
 */
