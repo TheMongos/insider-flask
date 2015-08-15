@@ -434,7 +434,6 @@ myApp.controller('top', function($scope,$resource, $location, $routeParams){
 	$scope.selectedCat = $scope.categories[0];
 	$scope.showFollowing = true;
 
-	$scope.invokeRanking = function(itemRankArr) {
 		console.log("invokeRanking");
 		$(".input-rank").rating({
 			min: 0,
@@ -446,9 +445,7 @@ myApp.controller('top', function($scope,$resource, $location, $routeParams){
 			showCaption: false,
 			starCaptions: {0: '0', 1: '1', 2: '2', 3: '3', 4: '4', 5: '5',}
 		});
-		angular.forEach(itemRankArr, function(rank){
 			$('#rank'+rank.item_id).rating('update', rank.avg);
-			console.log(rank)
 		});
 	}
 
@@ -617,7 +614,6 @@ myApp.directive('myRepeatDirective', function() {
 				showCaption: false,
 				starCaptions: {0: '0', 1: '1', 2: '2', 3: '3', 4: '4', 5: '5'}
 			});
-
 			angular.forEach(scope.itemsArr, function (rank) {
 				console.log('#rank' + rank.item_id + " " + rank.avg);
 				console.log(document.querySelector("#rank" + rank.item_id));
