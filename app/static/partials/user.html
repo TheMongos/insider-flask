@@ -30,13 +30,13 @@
 		</div>
 	</div>
 	<ul>
-		<li ng-repeat="rank in ranksArr" repeat-complete="invokeRanking()">
+		<li ng-repeat="rank in ranksArr">
 			<div class="row">
 				<a href="#/item/{{rank.item_id}}"><img class="col-xs-4 img-thumbnail" err-src="/static/images/items/default.jpg" ng-src="//image.tmdb.org/t/p/w342/{{rank.poster_path}}" /></a>
 				<div class="col-xs-8">
 					<h5><a href="#/item/{{rank.item_id}}">{{rank.title}}</a></h5>
 					<div class="row">
-						<p class="col-xs-6">rank: <input id="rank{{rank.item_id}}" class="input-rank" type="text"></p>
+						<p class="col-xs-6">rank: <input star-rank="{{rank.rank}}" class="input-rank" type="text"></p>
 						<button id="reviewBtn{{rank.item_id}}" ng-click="getReview($index ,rank.item_id)"
 							class="col-xs-6 btn btn-default reviewBtn btn-xs" ng-if="rank.review_text">read review</button>
 					</div>

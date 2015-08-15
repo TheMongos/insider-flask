@@ -5,17 +5,6 @@
 		</div>
 		<div class="col-md-6 col-xs-6">
 			<h4>{{item.itemDetails.title}}</h4>
-			<!--<div class="input-group myRankDiv">-->
-				<!--<span class="input-group-addon">my rank: </span> <select-->
-					<!--class="form-control"  ng-model="myRank">-->
-					<!--<option value="0">-&#45;&#45;</option>-->
-					<!--<option value="1">1</option>-->
-					<!--<option value="2">2</option>-->
-					<!--<option value="3">3</option>-->
-					<!--<option value="4">4</option>-->
-					<!--<option value="5">5</option>-->
-				<!--</select>-->
-			<!--</div>-->
 				<input id="input-user-rank" type="text" ng-model="myRank" ng-change=addRank()>
 			<button class="btn btn-default btn-block btn-xs reviewBtn"
 				ng-click="addReview()">{{reviewButton}}
@@ -60,7 +49,7 @@
 							<a href="#/user/{{rank.username}}">{{rank.username}}</a>
 						</h5>
 						<div class="row">
-							<p class="col-xs-6">rank: {{rank.rank}}</p>
+							<p class="col-xs-6"><input star-rank="{{rank.rank}}" class="input-rank" type="text"></p>
 							<button id="reviewBtn{{rank.username}}" ng-click="getReview($index ,rank.username)"
 							class="col-xs-6 btn btn-default reviewBtn btn-xs" ng-if="rank.review_text">read review</button>
 						</div>
