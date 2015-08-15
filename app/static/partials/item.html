@@ -1,7 +1,7 @@
 <div id="itemTemplate" class="container-fluid">
 	<div class="row page-header">
 		<div id="itemImg" class="col-md-6 col-xs-6">
-			<img class="img-thumbnail" fallback-src="/static/images/items/default.jpg"  ng-src="//image.tmdb.org/t/p/w342/{{item.itemDetails.poster_path}}" />
+			<img class="img-thumbnail" err-src="/static/images/items/default.jpg"  ng-src="//image.tmdb.org/t/p/w342/{{item.itemDetails.poster_path}}" />
 		</div>
 		<div class="col-md-6 col-xs-6">
 			<h4>{{item.itemDetails.title}}</h4>
@@ -54,7 +54,7 @@
 			<li ng-repeat="rank in ranksArr">
 				<div class="row">
 					<a href="#/user/{{rank.username}}"><img class="col-xs-4"
-						fallback-src="/static/images/users/default.jpg" ng-src="/static/images/users/{{rank.username}}.jpg" /></a>
+						err-src="/static/images/users/default.jpg" ng-src="/static/images/users/{{rank.username}}.jpg" /></a>
 					<div class="col-xs-8">
 						<h5>
 							<a href="#/user/{{rank.username}}">{{rank.username}}</a>

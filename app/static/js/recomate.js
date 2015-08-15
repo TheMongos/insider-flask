@@ -142,9 +142,7 @@ myApp.controller('user', function($scope, $resource, $location, $routeParams, Up
 			}
 		}
 
-		$("img").error(function(){
-	        $(this).attr('src', $(this).attr('fallback-src'));
-		});
+
 
 	}, function (error){
 		$location.path('/login').replace();
@@ -399,10 +397,7 @@ myApp.controller('item', function($scope,$resource, $location, $routeParams){
 	}
 
 
-	$("img").error(function(){
-		console.log("error in image");
-        $(this).attr('src',  $(this).attr('fallback-src'));
-	});
+
 });
 
 myApp.controller('top', function($scope,$resource, $location, $routeParams){
@@ -559,9 +554,6 @@ myApp.controller('following', function($scope,$resource, $location, $routeParams
 
 	$scope.followArr = Following.query(function(res){
 		console.log(res);
-			$("img").error(function(){
-	        $(this).attr('src', $(this).attr('fallback-src'));
-		});
 	},
 	function (error){
 		$location.path('/login').replace();
@@ -571,12 +563,8 @@ myApp.controller('following', function($scope,$resource, $location, $routeParams
 
 myApp.controller('followers', function($scope,$resource, $location, $routeParams){
 	var Followers = $resource('/user/followers/:username', {username: $routeParams.username});
-
 	$scope.followArr = Followers.query(function(res){
 		console.log(res);
-			$("img").error(function(){
-	        $(this).attr('src', $(this).attr('fallback-src'));
-		});
 	},
 	function (error){
 		$location.path('/login').replace();
@@ -584,6 +572,17 @@ myApp.controller('followers', function($scope,$resource, $location, $routeParams
 
 });
 
+myApp.directive('errSrc', function() {
+  return {
+    link: function(scope, element, attrs) {
+      element.bind('error', function() {
+        if (attrs.src != attrs.errSrc) {
+          attrs.$set('src', attrs.errSrc);
+        }
+      });
+    }
+  }
+});
 
 myApp.controller('addItem', function($scope,$resource, $location, $routeParams){
 

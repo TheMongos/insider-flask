@@ -1,7 +1,7 @@
 <div id="userTemplate" class="container-fluid">
 	<div class="row page-header">
 		<div id="userImg" class="col-md-6 col-xs-6">
-			<img fallback-src="/static/images/users/default.jpg" ng-src="/static/images/users/{{user.username}}.jpg?{{currDate}}"
+			<img err-src="/static/images/users/default.jpg" ng-src="/static/images/users/{{user.username}}.jpg?{{currDate}}"
 				class="img-rounded img-responsive"
 				ngf-src="preview" />
 			<div id="imageUpload" class="button glyphicon glyphicon-camera" aria-hidden="true"
@@ -32,7 +32,7 @@
 	<ul>
 		<li ng-repeat="rank in ranksArr" repeat-complete="invokeRanking()">
 			<div class="row">
-				<a href="#/item/{{rank.item_id}}"><img class="col-xs-4 img-thumbnail" fallback-src="/static/images/items/default.jpg" ng-src="//image.tmdb.org/t/p/w342/{{rank.poster_path}}" /></a>
+				<a href="#/item/{{rank.item_id}}"><img class="col-xs-4 img-thumbnail" err-src="/static/images/items/default.jpg" ng-src="//image.tmdb.org/t/p/w342/{{rank.poster_path}}" /></a>
 				<div class="col-xs-8">
 					<h5><a href="#/item/{{rank.item_id}}">{{rank.title}}</a></h5>
 					<div class="row">
