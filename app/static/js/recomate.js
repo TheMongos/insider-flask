@@ -371,19 +371,7 @@ myApp.controller('item', function($scope,$resource, $location, $routeParams){
 		});
 	}
 
-	// $scope.getFirstReview = function(review_id){
-	// 	var Review = $resource('/review/:review_id', {review_id: review_id});
-	// 	Review.get(function(res){
-	// 		console.log(res);
-	// 		$scope.reviewText = res.review_text;
-	// 	},
-	// 	function (error){
-	// 		$location.path('/login').replace();
-	// 	});
-	// }
-
 	$scope.getReview = function(index, username){
-		//var str = "#review-"+username;
 		var str2 = "review"+username;
 		var reviewBtn = "#reviewBtn"+username;
 		$(".reviewBtn").css("background-color","white");
@@ -398,7 +386,6 @@ myApp.controller('item', function($scope,$resource, $location, $routeParams){
 		}
 	};
 
-
 	$scope.deleteReview = function() {
 		var Delete = $resource('/review/:item_id', { item_id: $scope.item.itemDetails.item_id });
 
@@ -410,6 +397,7 @@ myApp.controller('item', function($scope,$resource, $location, $routeParams){
 			$location.path('/login').replace();
 		});
 	}
+
 
 	$("img").error(function(){
 		console.log("error in image");
@@ -434,6 +422,7 @@ myApp.controller('top', function($scope,$resource, $location, $routeParams){
 	$scope.selectedCat = $scope.categories[0];
 	$scope.showFollowing = true;
 
+	$scope.invokeRanking = function() {
 		console.log("invokeRanking");
 		$(".input-rank").rating({
 			min: 0,
@@ -445,7 +434,9 @@ myApp.controller('top', function($scope,$resource, $location, $routeParams){
 			showCaption: false,
 			starCaptions: {0: '0', 1: '1', 2: '2', 3: '3', 4: '4', 5: '5',}
 		});
+		angular.forEach($scope.itemsArr, function(rank){
 			$('#rank'+rank.item_id).rating('update', rank.avg);
+			console.log(rank);
 		});
 	}
 
@@ -572,6 +563,10 @@ myApp.controller('following', function($scope,$resource, $location, $routeParams
 	function (error){
 		$location.path('/login').replace();
 	});
+
+	$("img").error(function(){
+	        $(this).attr('src', $(this).attr('fallback-src'));
+		});
 });
 
 myApp.controller('followers', function($scope,$resource, $location, $routeParams){
@@ -583,6 +578,10 @@ myApp.controller('followers', function($scope,$resource, $location, $routeParams
 	function (error){
 		$location.path('/login').replace();
 	});
+
+	$("img").error(function(){
+	        $(this).attr('src', $(this).attr('fallback-src'));
+		});
 });
 
 
@@ -614,8 +613,13 @@ myApp.directive('myRepeatDirective', function() {
 				showCaption: false,
 				starCaptions: {0: '0', 1: '1', 2: '2', 3: '3', 4: '4', 5: '5'}
 			});
+			
 			angular.forEach(scope.itemsArr, function (rank) {
 				console.log('#rank' + rank.item_id + " " + rank.avg);
+				console.log('before' );
+				console.log(angular.element(jQuery('#rank' + rank.item_id)));
+				console.log('after');
+				jQuery('#rank' + rank.item_id).rating('update', rank.avg);
 				console.log(document.querySelector("#rank" + rank.item_id));
 				angular.element(jQuery('#rank' + rank.item_id)).rating('update', rank.avg);
 			});
