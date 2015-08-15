@@ -559,14 +559,14 @@ myApp.controller('following', function($scope,$resource, $location, $routeParams
 
 	$scope.followArr = Following.query(function(res){
 		console.log(res);
+			$("img").error(function(){
+	        $(this).attr('src', $(this).attr('fallback-src'));
+		});
 	},
 	function (error){
 		$location.path('/login').replace();
 	});
 
-	$("img").error(function(){
-	        $(this).attr('src', $(this).attr('fallback-src'));
-		});
 });
 
 myApp.controller('followers', function($scope,$resource, $location, $routeParams){
@@ -574,14 +574,14 @@ myApp.controller('followers', function($scope,$resource, $location, $routeParams
 
 	$scope.followArr = Followers.query(function(res){
 		console.log(res);
+			$("img").error(function(){
+	        $(this).attr('src', $(this).attr('fallback-src'));
+		});
 	},
 	function (error){
 		$location.path('/login').replace();
 	});
 
-	$("img").error(function(){
-	        $(this).attr('src', $(this).attr('fallback-src'));
-		});
 });
 
 
