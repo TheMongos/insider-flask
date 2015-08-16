@@ -49,7 +49,7 @@
 							<a href="#/user/{{rank.username}}">{{rank.username}}</a>
 						</h5>
 						<div class="row">
-							<p class="col-xs-6"><input star-rank="{{rank.rank}}" class="input-rank" type="text"></p>
+							<p class="col-xs-6"><input star-rank="{{rank.rank}}" rank-size="xxs" class="input-rank" type="text"></p>
 							<button id="reviewBtn{{rank.username}}" ng-click="getReview($index ,rank.username)"
 							class="col-xs-6 btn btn-default reviewBtn btn-xs" ng-if="rank.review_text">read review</button>
 						</div>

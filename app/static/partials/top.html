@@ -28,7 +28,7 @@
 						<span>{{$index +1}}. </span>
 						<a href="#/item/{{item.item_id}}">{{item.title}} ({{item.year}})</a>
 					</h5>
-					<p>rank:  <input star-rank="{{item.avg}}" class="input-rank" type="text"></p>
+					<p><input star-rank="{{item.avg}}" class="input-rank" type="text"></p>
 					<p>
 						<span ng-repeat="genre in item.genres" class="label genre-label label-default">{{genre}}</span>
 					</p>

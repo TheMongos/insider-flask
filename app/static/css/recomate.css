@@ -182,3 +182,10 @@ header
 	margin-right: 5px;
 	display: inline-block;
 }
+
+/*
+# ranking
+*/
+.rating-xxs {
+    font-size: 1.5em;
+}

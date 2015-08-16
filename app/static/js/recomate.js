@@ -241,7 +241,7 @@ myApp.controller('changeItem', function($scope,$resource, $location, $routeParam
 });
 
 myApp.controller('item', function($scope,$resource, $location, $routeParams){
-	$(".input-rank").rating({min:0, max:5, step:0.01, size:'xs', readonly:true, showClear:false, showCaption:false, starCaptions:{0:'0',1:'1',2:'2',3:'3',4:'4',5:'5',}});
+	$(".input-rank").rating({min:0, max:5, step:0.01, size:'xs', disabled:true, showClear:false, showCaption:false, starCaptions:{0:'0',1:'1',2:'2',3:'3',4:'4',5:'5',}});
 	$("#input-user-rank").rating({min:0, max:5, step:1, size:'xs', showClear:false, showCaption:false, starCaptions:{0:'0',1:'1',2:'2',3:'3',4:'4',5:'5',}});
 	var Item = $resource('/item/:item_id', {item_id: $routeParams.item_id});
 	Item.get(function(res){
@@ -539,11 +539,16 @@ myApp.controller('followers', function($scope,$resource, $location, $routeParams
 myApp.directive('starRank', function() {
   return {
     link: function(scope, element, attrs) {
+		var size = 'xs';
+		if(attrs.rankSize !== 'undefined'){
+			console.log("rankSize " + attrs.rankSize);
+			size = attrs.rankSize;
+		}
 		element.rating({
 			min: 0,
 			max: 5,
 			step: 0.01,
-			size: 'xs',
+			size: size,
 			readonly: true,
 			showClear: false,
 			showCaption: false,
