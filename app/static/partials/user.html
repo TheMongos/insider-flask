@@ -37,8 +37,12 @@
 					<h5><a href="#/item/{{rank.item_id}}">{{rank.title}}</a></h5>
 					<div class="row">
 						<p class="col-xs-6"><input star-rank="{{rank.rank}}" class="input-rank" type="text"></p>
-						<button id="reviewBtn{{rank.item_id}}" ng-click="getReview($index ,rank.item_id)"
-							class="col-xs-6 btn btn-default reviewBtn btn-xs" ng-if="rank.review_text">read review</button>
+
+					</div>
+					<div class="row">
+						<p class="col-xs-12"><button id="reviewBtn{{rank.item_id}}" ng-click="getReview($index ,rank.item_id)"
+							class="col-xs-6 btn btn-default reviewBtn btn-xs " ng-if="rank.review_text">read review</button></p>
+
 					</div>
 				</div>
 			</div>
