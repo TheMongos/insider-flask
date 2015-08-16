@@ -540,7 +540,7 @@ myApp.directive('starRank', function() {
   return {
     link: function(scope, element, attrs) {
 		var size = 'xs';
-		if(attrs.rankSize !== 'undefined'){
+		if(typeof(attrs.rankSize) !== 'undefined'){
 			console.log("rankSize " + attrs.rankSize);
 			size = attrs.rankSize;
 		}
