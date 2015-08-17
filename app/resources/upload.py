@@ -21,7 +21,7 @@ class Upload(Resource):
             filename = secure_filename(user_image.filename)
 	    path = os.path.join(app.config['UPLOAD_FOLDER'], my_username + '.jpg')
             user_image.save(path)
-	    resize_image(path)
+	    #resize_image(path)
             return_code = 200
             message = { 'status': 'success', 'message': 'image uploaded successfully.'}
 

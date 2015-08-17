@@ -1,0 +1,17 @@
+# nginx #
+#########
+sudo /etc/init.d/nginx start
+sudo rm /etc/nginx/sites-enabled/default
+sudo touch /etc/nginx/sites-available/flask_project
+sudo ln -s /etc/nginx/sites-available/flask_project /etc/nginx/sites-enabled/flask_project
+sudo vim /etc/nginx/sites-enabled/flask_project
+sudo /etc/init.d/nginx restart
+
+# supervisor #
+##############
+sudo vim /etc/supervisor/conf.d/flask_project.conf
+sudo pkill gunicorn
+sudo supervisorctl reread
+sudo supervisorctl update
+sudo supervisorctl start flask_project
+sudo supervisorctl restart
