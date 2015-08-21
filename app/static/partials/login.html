@@ -5,6 +5,8 @@
 
 <label class="sr-only" for="password">password:</label>
 <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="password" class="form-control" type="password" id="password" ng-model="password">
+    <fb:login-button scope="public_profile,email,user_friends" onlogin="checkLoginState();">
+</fb:login-button>
 <button class="btn btn-primary btn-block loginBtn" ng-click="login()">login</button>
 <div>
 <p>Don't have an account? <a href="#/signup">Signup</a></p>
