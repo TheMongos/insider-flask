@@ -556,8 +556,9 @@ myApp.directive('starRank', function() {
 		});
 		element.rating('update', attrs.starRank);
 
-		var height = element.parent().parent().parent()[0].offsetHeight;
-		element.parent().parent().parent().append('<div class="warp-stars" style="height: '+height+'px"></div>')
+		var height = element.parent().parent()[0].offsetHeight;
+		var width = element.parent().parent()[0].offsetWidth;
+		element.parent().parent().parent().append('<div class="warp-stars" style="height: '+height+'px;width: '+width+'px;"></div>')
 
     }
   }
