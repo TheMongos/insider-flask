@@ -46,8 +46,10 @@
 					</div>
 				</div>
 			</div>
-			<div ng-if="rank.review_text" id="review-{{rank.item_id}}"
-				ng-show="review{{rank.item_id}}">{{rank.review_text}}</div>
+			<div class="review-div" ng-if="rank.review_text" id="review-{{rank.item_id}}"
+				ng-show="review{{rank.item_id}}">{{rank.review_text}}
+
+			</div>
 		</li>
 	</ul>
 
