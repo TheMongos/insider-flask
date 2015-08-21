@@ -192,7 +192,15 @@ header
 
 .warp-stars {
 	position: absolute;
-    width: 100% ;
-    height: 100px ;
-    top: 0;
+    	width: 100% ;
+   	height: 100px ;
+    	top: 0;
+}
+
+.select-menu {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	background-color: #fff;
+	background: url(../images/arrow.png) no-repeat right ;
 }

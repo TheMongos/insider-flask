@@ -2,12 +2,12 @@
 	<div class="row page-header container-fluid">
 		<h4>Top Titles</h4>
 		<p>
-			<select class="form-control" ng-model="selectedCat"
+			<select class="form-control select-menu" ng-model="selectedCat"
 				ng-change="changeCategory()"
 				ng-options="category.label for category in categories"></select>
 		</p>
 		<p>
-			<select class="form-control" ng-model="selectedGenre"
+			<select class="form-control select-menu" ng-model="selectedGenre"
 				ng-change="changeGenre()"
 				ng-options="genre as genre for genre in genreArr"></select>
 		</p>
