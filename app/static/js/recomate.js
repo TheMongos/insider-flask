@@ -243,6 +243,11 @@ myApp.controller('changeItem', function($scope,$resource, $location, $routeParam
 myApp.controller('item', function($scope,$resource, $location, $routeParams){
 	$(".input-rank").rating({min:0, max:5, step:0.01, size:'xs', disabled:true, showClear:false, showCaption:false, starCaptions:{0:'0',1:'1',2:'2',3:'3',4:'4',5:'5',}});
 	$("#input-user-rank").rating({min:0, max:5, step:1, size:'xs', showClear:false, showCaption:false, starCaptions:{0:'0',1:'1',2:'2',3:'3',4:'4',5:'5',}});
+	$('#input-user-rank').on('rating.change', function(event, value, caption) {
+				console.log("rating.change");
+				 $scope.myRank = value;
+				 $scope.addRank();
+			});
 	var Item = $resource('/item/:item_id', {item_id: $routeParams.item_id});
 	Item.get(function(res){
 		$scope.item = res;
@@ -256,11 +261,6 @@ myApp.controller('item', function($scope,$resource, $location, $routeParams){
 
 		if (res.itemRanks.rank) {
 			$('#input-user-rank').rating('update', res.itemRanks.rank);
-			$('#input-user-rank').on('rating.change', function(event, value, caption) {
-				console.log("rating.change");
-				 $scope.myRank = value;
-				 $scope.addRank();
-			});
 			$scope.myRank = res.itemRanks.rank;
 			$scope.reviewText = res.itemRanks.review_text;
 		} else {
