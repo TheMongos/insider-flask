@@ -257,6 +257,7 @@ myApp.controller('item', function($scope,$resource, $location, $routeParams){
 		if (res.itemRanks.rank) {
 			$('#input-user-rank').rating('update', res.itemRanks.rank);
 			$('#input-user-rank').on('rating.change', function(event, value, caption) {
+				console.log("rating.change");
 				 $scope.myRank = value;
 				 $scope.addRank();
 			});
