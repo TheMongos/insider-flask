@@ -555,6 +555,10 @@ myApp.directive('starRank', function() {
 			starCaptions: {0: '0', 1: '1', 2: '2', 3: '3', 4: '4', 5: '5',}
 		});
 		element.rating('update', attrs.starRank);
+
+		var height = element.parent().parent().parent()[0].offsetHeight;
+		element.parent().parent().parent().append('<div class="warp-stars" style="height: '+height+'px"></div>')
+
     }
   }
 });
