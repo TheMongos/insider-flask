@@ -190,6 +190,14 @@ header
     font-size: 1em;
 }
 
+/*
+# review
+*/
+.review-div {
+    border-bottom: 1px solid #eee;
+	padding: 10px 0;
+}
+
 .warp-stars {
 	position: absolute;
     	width: 100% ;

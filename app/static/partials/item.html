@@ -55,7 +55,7 @@
 						</div>
 					</div>
 				</div>
-				<div ng-if="rank.review_text" id="review-{{rank.username}}"
+				<div class="review-div"  ng-if="rank.review_text" id="review-{{rank.username}}"
 				ng-show="review{{rank.username}}">{{rank.review_text}}</div>
 
 			</li>
@@ -64,6 +64,6 @@
 			<span class="text-muted">Total rank: </span><input id="totalRank" class="input-rank" type="text"> ({{item.itemRanks.totalCount}} {{item.itemRanks.totalCount == 1 ? "mate" : "mates"}})
 		</h5>
 		<button class="btn btn-primary" ng-click="showDescription()">description</button>
-		<p ng-show="description">{{item.itemDetails.overview}}</p>
+		<p class="review-div" ng-show="description">{{item.itemDetails.overview}}</p>
 	</div>
 </div>
