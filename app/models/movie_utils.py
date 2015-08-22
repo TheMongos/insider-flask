@@ -5,7 +5,7 @@ class MovieUtils(ItemUtils):
     @staticmethod
     def search_item(query):
         print "MovieUtils search_item called with: query_text={0}".format(query)
-        item_ids_str = ItemUtils.search_item_in_sql(query, 1)
+        item_ids_str = ItemUtils.search_item_in_sql(query, 'Movie')
         query = """MATCH (i:Item)
                 WHERE i.item_id IN [{0}]
                 RETURN i.item_id AS item_id

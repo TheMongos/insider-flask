@@ -5,7 +5,7 @@ class TvUtils(ItemUtils):
     @staticmethod
     def search_item(query):
         print "TvUtils search_item called with: query_text={0}".format(query)
-        item_ids_str = ItemUtils.search_item_in_sql(query, 2)
+        item_ids_str = ItemUtils.search_item_in_sql(query, 'TV')
         query = """MATCH (i:Item)
                 WHERE i.item_id IN [{0}]
                 RETURN i.item_id AS item_id
