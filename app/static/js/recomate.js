@@ -465,9 +465,11 @@ myApp.controller('search', function($scope,$resource, $location, $routeParams){
 		if (clicked == "tv"){
 			isUserTemp = $scope.isUser;
 			$scope.isTv = true; $scope.isMovie = false; $scope.isUser = false;
+			$scope.search();
 		} else if (clicked == "movie"){
 			isUserTemp = $scope.isUser;
 			$scope.isMovie = true; $scope.isTv = false; $scope.isUser = false;
+			$scope.search();
 		} else if (clicked == "user"){
 			$scope.isUser = true; $scope.isMovie = false; $scope.isTv = false;
 			$scope.search();
@@ -498,7 +500,8 @@ myApp.controller('search', function($scope,$resource, $location, $routeParams){
 					$scope.loading = false;
 				});
 			} else {
-				var SearchItem = $resource('/search/item/:query', { query : $scope.searchText });
+				var item_type = ($scope.isTv ==  true) ? 2 : 1 ;
+				var SearchItem = $resource('/search/item/:item_type/:query', { query : $scope.searchText , item_type : item_type});
 
 				SearchItem.query(function(res) {
 					$scope.itemArr = res;

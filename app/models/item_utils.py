@@ -62,8 +62,8 @@ class ItemUtils():
         return new_id
 
     @staticmethod
-    def search_item(query):
-        item_ids_str = ItemUtils.search_item_in_sql(query)
+    def search_item(query, item_type):
+        item_ids_str = ItemUtils.search_item_in_sql(query, item_type)
         query = """MATCH (i:Item)
                 WHERE i.item_id IN [{0}]
                 RETURN i.item_id AS item_id
@@ -160,18 +160,20 @@ class ItemUtils():
         return genres
 
     @staticmethod
-    def search_item_in_sql(query_text):
+    def search_item_in_sql(query_text, item_type):
+        print "search_item_in_sql called with: item_type={0} query_text={1}".format(item_type, query_text)
         query = """SELECT item_id
                 FROM Title
-                WHERE title LIKE ? 
+                WHERE title LIKE ?
+                AND type = ?
 		ORDER BY popularity DESC
                 LIMIT 25"""
 	
         print query
         connection = sqlite3.connect(SQL_DB)
         cursor = connection.cursor()
-	cursor.execute(query, ('%{}%'.format(query_text),))
-	rows = cursor.fetchall()
+        cursor.execute(query, ('%{}%'.format(query_text),item_type,))
+        rows = cursor.fetchall()
         result = []
         for row in rows:
             result.append(str(row[0]))
