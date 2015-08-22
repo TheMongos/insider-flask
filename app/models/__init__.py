@@ -12,7 +12,8 @@ graph = Graph(url + '/db/data/')
 
 # graph constraints
 nodes = [
-    ('Item', 'tmdb_id'),
+    ('Movie', 'tmdb_id'),
+    ('TV', 'tmdb_id'),
     ('User', 'username')
 ]
 
