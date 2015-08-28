@@ -9,7 +9,7 @@ from . import api
 class SearchItem(Resource):
 	decorators = [login_required]
 	def get(self, item_type, query):
-		if (item_type == 1):
+		if item_type == 1:
 			rtn_arr = MovieUtils.search_item(query)
 		else:
 			rtn_arr = TvUtils.search_item(query)

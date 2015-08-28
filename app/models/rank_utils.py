@@ -21,7 +21,8 @@ class RankUtils():
                     , r.review_text as review_text
                     , i.item_id as item_id
                     , i.title as title
-                    , i.poster_path as poster_path""".format(username)
+                    , i.poster_path as poster_path
+		    ORDER BY r.ts DESC""".format(username)
         print query
         queryRes = graph.cypher.execute(query)
         rtn_arr = []
