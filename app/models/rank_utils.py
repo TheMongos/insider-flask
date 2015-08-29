@@ -50,12 +50,12 @@ class RankUtils():
         return rtn_arr
 
     def add_review(self, username, item_id, review_text, rank):
-        query = """MATCH (u:User {{username: '{0}'}}), (i:Item {{item_id: {1}}})
+        query = u"""MATCH (u:User {{username: '{0}'}}), (i:Item {{item_id: {1}}})
                     CREATE UNIQUE (u)-[r:RANKED]->(i)
                     SET r.rank = {2}, r.review_text = '{3}'
                     ,r.ts = timestamp()
                     RETURN r.rank""".format(username, item_id, rank, review_text)
-        print query
+        #print query
         queryRes = graph.cypher.execute(query)
         if len(queryRes) != 0:
             return True
