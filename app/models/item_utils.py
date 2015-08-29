@@ -3,6 +3,7 @@ from py2neo import Node
 from . import graph
 from . import SQL_DB
 import sqlite3
+import re
 
 
 class ItemUtils():
@@ -163,6 +164,7 @@ class ItemUtils():
     @staticmethod
     def search_item_in_sql(query_text, item_type):
         print "search_item_in_sql called with: item_type={0} query_text={1}".format(item_type, query_text)
+	query_text = re.sub('[\s,-]+', '%', query_text)
         query = """SELECT item_id
                 FROM Title
                 WHERE title LIKE ?
