@@ -1,3 +1,4 @@
+#  -*- coding: utf-8 -*-
 from flask import Blueprint, session, redirect
 from flask_restful import Api
 from ..models.user import User

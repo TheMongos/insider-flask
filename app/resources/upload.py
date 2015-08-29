@@ -1,3 +1,4 @@
+#  -*- coding: utf-8 -*-
 import os
 from flask_restful import Resource, request
 from werkzeug import secure_filename

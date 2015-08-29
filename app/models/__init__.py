@@ -1,3 +1,4 @@
+#  -*- coding: utf-8 -*-
 from py2neo import Graph, authenticate
 
 url = 'http://localhost:7474'

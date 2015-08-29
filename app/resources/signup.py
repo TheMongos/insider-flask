@@ -1,3 +1,4 @@
+#  -*- coding: utf-8 -*-
 from flask_restful import Resource, request
 from . import api
 from ..models.user import User

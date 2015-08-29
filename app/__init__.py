@@ -1,3 +1,4 @@
+#  -*- coding: utf-8 -*-
 from flask import Flask, abort
 from flask_login import LoginManager
 from models.user import User

@@ -1,3 +1,4 @@
+#  -*- coding: utf-8 -*-
 from flask_restful import Resource
 from ..models.rank_utils import RankUtils
 from flask_login import login_required

@@ -1,3 +1,4 @@
+#  -*- coding: utf-8 -*-
 from flask_restful import Resource
 from flask_login import logout_user, login_required, current_user
 from . import api

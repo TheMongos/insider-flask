@@ -1,3 +1,4 @@
+#  -*- coding: utf-8 -*-
 from flask.ext.login import UserMixin, current_user
 from passlib.hash import bcrypt
 from py2neo import Node, Relationship
